@@ -61,7 +61,7 @@ Each site has its own settings; the `POSTILIO_API_KEY` constant applies to all o
 
 This plug-in sends email through the Postilio API (`https://api.postilio.eu`), run by Postilio in the European Union. It does so only once you set an API key, and then for every email your site sends with `wp_mail()`, and for the status line and the test email on its settings page.
 
-What is sent, for each email: the sender, the recipients, the subject, the text and HTML body, the attachments, the Reply-To address and the custom headers listed above, plus your API key, a tag (`wordpress`), and the plug-in's and PHP's version in the User-Agent. For the status line: a request for your project's domains. Postilio keeps a message log with recipients, statuses and (unless your project turns it off) subjects, never bodies or attachments.
+What is sent, for each email: the sender, the recipients, the subject, the text and HTML body, the attachments, the Reply-To address and the custom headers listed above, plus your API key, a tag (`wordpress`), and the plug-in's and PHP's version in the User-Agent. For the status line: a request for your project's domains. Postilio holds an email's content only until the receiving mail server has it; its message log keeps, per recipient, the sender, the recipient, the status and its events, and the subject unless your project turns that off, for 30 days by default. Postilio's documentation: https://docs.postilio.eu. Postilio's terms of service and privacy policy for the service: to be published before this plug-in is listed.
 
 == Changelog ==
 

@@ -31,4 +31,4 @@ fi
 printf '{ "phpVersion": "%s", "core": %s }\n' "$php_version" "$core" > .wp-env.override.json
 
 "${wp_env[@]}" start --update 2>/dev/null
-"${wp_env[@]}" run cli wp eval-file wp-content/postilio-integration/scenarios.php 2>/dev/null
+"${wp_env[@]}" run cli wp eval-file wp-content/postilio-integration/scenarios.php

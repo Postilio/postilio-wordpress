@@ -224,7 +224,9 @@ update_option( 'postilio_api_key', 'pk_test_11111111111111111111111111111111', f
 set_transient( 'postilio_status', array( 'key' => 'accepted' ) );
 define( 'WP_UNINSTALL_PLUGIN', 'postilio-for-wordpress/postilio-for-wordpress.php' );
 require WP_PLUGIN_DIR . '/postilio-for-wordpress/uninstall.php';
-$check( 'uninstall removes the settings, the stored key and the status', false === get_option( 'postilio_settings' ) && false === get_option( 'postilio_api_key' ) && false === get_transient( 'postilio_status' ) );
+global $wpdb;
+$left = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%postilio%'" ); // phpcs:ignore WordPress.DB
+$check( 'uninstall removes the settings, the stored key and the status from the database', array() === $left, $left );
 
 // No PHP notices, warnings or deprecations from the plug-in.
 $debug = is_file( WP_CONTENT_DIR . '/debug.log' ) ? (string) file_get_contents( WP_CONTENT_DIR . '/debug.log' ) : '';

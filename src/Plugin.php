@@ -21,11 +21,12 @@ final class Plugin {
 	private const TIMEOUT = 15.0;
 
 	/**
-	 * The mailer of this request, made when the first email is sent.
+	 * The mailer, made when the first email is sent, and again when the key or the settings change (in WP-CLI or a queue
+	 * worker, which send many emails in one process).
 	 *
-	 * @var Mailer|null
+	 * @var array{key: string, settings: Settings, mailer: Mailer}|null
 	 */
-	private static ?Mailer $mailer = null;
+	private static ?array $mailer = null;
 
 	/**
 	 * Hooks the plug-in in.
@@ -63,15 +64,22 @@ final class Plugin {
 		if ( null === $key ) {
 			return null;
 		}
-		self::$mailer ??= new Mailer(
-			self::client( $key ),
-			Settings::load(),
-			static function ( string $line ): void {
-				error_log( $line ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- failures belong in the PHP error log; the line holds no key, recipient or content.
-			}
-		);
+		$settings = Settings::load();
+		if ( null === self::$mailer || self::$mailer['key'] !== $key || self::$mailer['settings'] != $settings ) { // phpcs:ignore Universal.Operators.StrictComparisons.LooseNotEqual -- compares the values of two settings.
+			self::$mailer = array(
+				'key'      => $key,
+				'settings' => $settings,
+				'mailer'   => new Mailer(
+					self::client( $key ),
+					$settings,
+					static function ( string $line ): void {
+						error_log( $line ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- failures belong in the PHP error log; the line holds no key, recipient or content.
+					}
+				),
+			);
+		}
 
-		return self::$mailer;
+		return self::$mailer['mailer'];
 	}
 
 	/**

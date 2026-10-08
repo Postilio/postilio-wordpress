@@ -1,0 +1,14 @@
+includes:
+  - vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+  level: max
+  phpVersion:
+    min: 80200
+    max: 80599
+  bootstrapFiles:
+    - vendor-prefixed/autoload.php
+  paths:
+    - postilio-for-wordpress.php
+    - uninstall.php
+    - src
+    - tests

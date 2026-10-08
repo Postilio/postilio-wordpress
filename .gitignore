@@ -1,0 +1,10 @@
+/vendor/
+/vendor-prefixed/
+/.phpunit.cache/
+/build/
+/dist/
+/node_modules/
+.idea/
+.vscode/
+.env
+.phpcs.cache

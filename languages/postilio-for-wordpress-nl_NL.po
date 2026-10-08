@@ -4,274 +4,276 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Postilio for WordPress 0.1.0-alpha.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Postilio/postilio-wordpress/issues\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Postilio\n"
+"Language-Team: Dutch\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "POT-Creation-Date: 2026-10-08T16:23:45+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-10-08 18:30+0200\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: postilio-for-wordpress\n"
 
 #. Plugin Name of the plugin
 #: postilio-for-wordpress.php
 msgid "Postilio for WordPress"
-msgstr ""
+msgstr "Postilio for WordPress"
 
 #. Plugin URI of the plugin
 #: postilio-for-wordpress.php
 msgid "https://github.com/Postilio/postilio-wordpress"
-msgstr ""
+msgstr "https://github.com/Postilio/postilio-wordpress"
 
 #. Description of the plugin
 #: postilio-for-wordpress.php
 msgid "Sends your site's email through Postilio, European transactional email, instead of the server's own mail function."
-msgstr ""
+msgstr "Verstuurt de e-mail van je site via Postilio, Europese transactionele e-mail, in plaats van met de eigen mailfunctie van de server."
 
 #. Author of the plugin
 #: postilio-for-wordpress.php
 #: src/AdminPage.php:48
 msgid "Postilio"
-msgstr ""
+msgstr "Postilio"
 
 #. Author URI of the plugin
 #: postilio-for-wordpress.php
 msgid "https://postilio.eu"
-msgstr ""
+msgstr "https://postilio.eu"
 
 #: src/AdminPage.php:67
 #: src/AdminPage.php:68
 #: src/AdminPage.php:199
 msgid "API key"
-msgstr ""
+msgstr "API-sleutel"
 
 #: src/AdminPage.php:69
 msgid "Sender"
-msgstr ""
+msgstr "Afzender"
 
 #: src/AdminPage.php:70
 msgid "From address"
-msgstr ""
+msgstr "Afzenderadres"
 
 #: src/AdminPage.php:71
 msgid "From name"
-msgstr ""
+msgstr "Afzendernaam"
 
 #: src/AdminPage.php:72
 msgid "Force this sender"
-msgstr ""
+msgstr "Deze afzender afdwingen"
 
 #: src/AdminPage.php:92
 msgid "Sending…"
-msgstr ""
+msgstr "Bezig met versturen…"
 
 #: src/AdminPage.php:93
 msgid "The test email could not be sent: no answer from WordPress."
-msgstr ""
+msgstr "De testmail kon niet worden verstuurd: geen antwoord van WordPress."
 
 #: src/AdminPage.php:94
 msgid "Message id"
-msgstr ""
+msgstr "Bericht-id"
 
 #: src/AdminPage.php:95
 #: src/AdminPage.php:198
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/AdminPage.php:96
 msgid "Events"
-msgstr ""
+msgstr "Gebeurtenissen"
 
 #: src/AdminPage.php:97
 msgid "Suppressed, not sent"
-msgstr ""
+msgstr "Onderdrukt, niet verstuurd"
 
 #: src/AdminPage.php:98
 msgid "Error code"
-msgstr ""
+msgstr "Foutcode"
 
 #: src/AdminPage.php:112
 msgid "Postilio for WordPress has no API key yet, so WordPress still sends its email itself."
-msgstr ""
+msgstr "Postilio for WordPress heeft nog geen API-sleutel, dus WordPress verstuurt zijn e-mail nog zelf."
 
 #: src/AdminPage.php:114
 msgid "Set it up"
-msgstr ""
+msgstr "Instellen"
 
 #: src/AdminPage.php:126
 msgid "Settings"
-msgstr ""
+msgstr "Instellingen"
 
 #: src/AdminPage.php:145
 msgid "Send a test email"
-msgstr ""
+msgstr "Testmail versturen"
 
 #: src/AdminPage.php:146
 msgid "Sends a short email through wp_mail(), the way your site sends all its email, and shows what Postilio answered. With a live key it is delivered and counts as usage; with a test key nothing is delivered."
-msgstr ""
+msgstr "Verstuurt een korte e-mail via wp_mail(), zoals je site al zijn e-mail verstuurt, en toont wat Postilio antwoordde. Met een live-sleutel wordt hij bezorgd en telt hij als verbruik; met een testsleutel wordt niets bezorgd."
 
 #: src/AdminPage.php:147
 msgid "Send to"
-msgstr ""
+msgstr "Versturen naar"
 
 #: src/AdminPage.php:149
 msgid "Send test email"
-msgstr ""
+msgstr "Testmail versturen"
 
 #: src/AdminPage.php:159
 msgid "No API key yet: WordPress sends its email itself, as before. Set a key below, or better, in wp-config.php."
-msgstr ""
+msgstr "Nog geen API-sleutel: WordPress verstuurt zijn e-mail zelf, zoals voorheen. Stel hieronder een sleutel in, of beter, in wp-config.php."
 
 #: src/AdminPage.php:164
 msgid "The API key is not a Postilio API key (pk_live_… or pk_test_…). No email is sent until it is."
-msgstr ""
+msgstr "De API-sleutel is geen Postilio-API-sleutel (pk_live_… of pk_test_…). Er wordt geen e-mail verstuurd tot hij dat wel is."
 
 #: src/AdminPage.php:174
 msgid "from wp-config.php"
-msgstr ""
+msgstr "uit wp-config.php"
 
 #: src/AdminPage.php:174
 msgid "from these settings"
-msgstr ""
+msgstr "uit deze instellingen"
 
 #: src/AdminPage.php:175
 msgid "test key: nothing is delivered"
-msgstr ""
+msgstr "testsleutel: er wordt niets bezorgd"
 
 #: src/AdminPage.php:175
 msgid "live key"
-msgstr ""
+msgstr "live-sleutel"
 
 #. translators: 1: the masked key, 2: live or test key, 3: where the key comes from.
 #: src/AdminPage.php:178
 #, php-format
 msgid "Accepted: %1$s, %2$s, %3$s."
-msgstr ""
+msgstr "Geaccepteerd: %1$s, %2$s, %3$s."
 
 #. translators: 1: the masked key.
 #: src/AdminPage.php:180
 #, php-format
 msgid "Not accepted: Postilio does not know %1$s, or it was revoked."
-msgstr ""
+msgstr "Niet geaccepteerd: Postilio kent %1$s niet, of hij is ingetrokken."
 
 #. translators: 1: the masked key.
 #: src/AdminPage.php:182
 #, php-format
 msgid "Could not be checked: %1$s."
-msgstr ""
+msgstr "Kon niet worden gecontroleerd: %1$s."
 
 #: src/AdminPage.php:190
 msgid "verified."
-msgstr ""
+msgstr "geverifieerd."
 
 #: src/AdminPage.php:191
 msgid "not verified yet: not all of its DNS records were found. Postilio refuses email from it until they are."
-msgstr ""
+msgstr "nog niet geverifieerd: niet al zijn DNS-records zijn gevonden. Postilio weigert e-mail vanaf dit domein tot dat wel zo is."
 
 #: src/AdminPage.php:192
 msgid "failing: a DNS record went missing. Postilio keeps sending for 72 hours, then refuses email from it until the record is back."
-msgstr ""
+msgstr "faalt: er is een DNS-record verdwenen. Postilio blijft 72 uur versturen en weigert daarna e-mail vanaf dit domein tot het record terug is."
 
 #: src/AdminPage.php:193
 msgid "not a domain of this key's project. Postilio refuses email from it."
-msgstr ""
+msgstr "geen domein van het project van deze sleutel. Postilio weigert e-mail vanaf dit domein."
 
 #: src/AdminPage.php:194
 msgid "unknown: the key may not read domains (scope domains:manage, never on a test key). Send a test email to see whether Postilio takes it."
-msgstr ""
+msgstr "onbekend: de sleutel mag geen domeinen lezen (scope domains:manage, nooit op een testsleutel). Verstuur een testmail om te zien of Postilio het domein accepteert."
 
 #: src/AdminPage.php:200
 msgid "Sender domain"
-msgstr ""
+msgstr "Afzenderdomein"
 
 #. translators: %s: how long ago, such as "5 mins".
 #: src/AdminPage.php:203
 #, php-format
 msgid "Checked %s ago."
-msgstr ""
+msgstr "%s geleden gecontroleerd."
 
 #: src/AdminPage.php:206
 msgid "Check again"
-msgstr ""
+msgstr "Opnieuw controleren"
 
 #: src/AdminPage.php:219
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 #: src/AdminPage.php:219
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/AdminPage.php:219
 msgid "Problem"
-msgstr ""
+msgstr "Probleem"
 
 #: src/AdminPage.php:225
 msgid "Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email's delivery here, and domains:manage to see the sender domain's status. Safest is the constant in wp-config.php, outside the database:"
-msgstr ""
+msgstr "Maak een sleutel aan in het Postilio-portaal onder Keys & SMTP, met de scope emails:send. Voeg emails:read toe om hier de bezorging van een testmail te zien, en domains:manage voor de status van het afzenderdomein. Het veiligst is de constante in wp-config.php, buiten de database:"
 
 #. translators: %s: the masked key.
 #: src/AdminPage.php:234
 #, php-format
 msgid "Set in wp-config.php (POSTILIO_API_KEY): %s"
-msgstr ""
+msgstr "Ingesteld in wp-config.php (POSTILIO_API_KEY): %s"
 
 #: src/AdminPage.php:241
 msgid "Stored in the database, not autoloaded, and never shown again."
-msgstr ""
+msgstr "Wordt opgeslagen in de database, niet automatisch geladen en nooit meer getoond."
 
 #. translators: %s: the masked key.
 #: src/AdminPage.php:243
 #, php-format
 msgid "A key is stored: %s. Enter a new one to replace it, or leave this empty to keep it."
-msgstr ""
+msgstr "Er is een sleutel opgeslagen: %s. Vul een nieuwe in om hem te vervangen, of laat dit leeg om hem te houden."
 
 #: src/AdminPage.php:246
 msgid "Remove the stored key (WordPress then sends its email itself again)"
-msgstr ""
+msgstr "De opgeslagen sleutel verwijderen (WordPress verstuurt zijn e-mail dan weer zelf)"
 
 #: src/AdminPage.php:252
 msgid "Postilio sends only from an address on a domain you verified in the key's project. WordPress sends as wordpress@ and your site's domain by default, which Postilio would refuse."
-msgstr ""
+msgstr "Postilio verstuurt alleen vanaf een adres op een domein dat je in het project van de sleutel hebt geverifieerd. WordPress verstuurt standaard als wordpress@ met het domein van je site, en dat zou Postilio weigeren."
 
 #: src/AdminPage.php:259
 msgid "Such as no-reply@mail.example.com."
-msgstr ""
+msgstr "Bijvoorbeeld no-reply@mail.example.com."
 
 #: src/AdminPage.php:266
 msgid "Without @ or a comma; Postilio does not take them in a name."
-msgstr ""
+msgstr "Zonder @ of komma; die accepteert Postilio niet in een naam."
 
 #: src/AdminPage.php:273
 msgid "Send every email from this address and name"
-msgstr ""
+msgstr "Elke e-mail vanaf dit adres en met deze naam versturen"
 
 #: src/AdminPage.php:274
 msgid "On by default. Off: a From header of the plug-in that sends, and the wp_mail_from and wp_mail_from_name filters, choose the sender, as in WordPress itself; Postilio still refuses a sender outside your verified domains."
-msgstr ""
+msgstr "Standaard aan. Uit: een From-header van de plug-in die verstuurt en de filters wp_mail_from en wp_mail_from_name kiezen de afzender, zoals in WordPress zelf; Postilio weigert nog steeds een afzender buiten je geverifieerde domeinen."
 
 #: src/AdminPage.php:281
 msgid "You may not do this."
-msgstr ""
+msgstr "Je mag dit niet doen."
 
 #: src/AdminPage.php:303
 msgid "You may not send a test email."
-msgstr ""
+msgstr "Je mag geen testmail versturen."
 
 #: src/AdminPage.php:307
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Vul een geldig e-mailadres in."
 
 #: src/AdminPage.php:312
 msgid "Set an API key first."
-msgstr ""
+msgstr "Stel eerst een API-sleutel in."
 
 #. translators: %s: the site's name.
 #: src/AdminPage.php:316
 #, php-format
 msgid "Test email from %s"
-msgstr ""
+msgstr "Testmail van %s"
 
 #. translators: %s: the site's address.
 #: src/AdminPage.php:318
@@ -280,30 +282,30 @@ msgid ""
 "This is a test email from Postilio for WordPress on %s.\n"
 "\n"
 "If you can read this, your site sends its email through Postilio."
-msgstr ""
+msgstr "Dit is een testmail van Postilio for WordPress op %s.\n\nAls je dit kunt lezen, verstuurt je site zijn e-mail via Postilio."
 
 #: src/AdminPage.php:325
 msgid "Another plug-in stopped the email before Postilio could send it."
-msgstr ""
+msgstr "Een andere plug-in hield de e-mail tegen voordat Postilio hem kon versturen."
 
 #. translators: %s: the recipient.
 #: src/AdminPage.php:333
 #, php-format
 msgid "Postilio accepted the email for %s."
-msgstr ""
+msgstr "Postilio heeft de e-mail voor %s geaccepteerd."
 
 #: src/AdminPage.php:354
 msgid "This is the status right after sending; later events show in the Postilio portal."
-msgstr ""
+msgstr "Dit is de status direct na het versturen; latere gebeurtenissen staan in het Postilio-portaal."
 
 #: src/AdminPage.php:356
 msgid "Give the key the scope emails:read to see the delivery here, or look it up in the Postilio portal."
-msgstr ""
+msgstr "Geef de sleutel de scope emails:read om de bezorging hier te zien, of zoek hem op in het Postilio-portaal."
 
 #: src/Settings.php:111
 msgid "That is not a Postilio API key: it starts with pk_live_ or pk_test_ and has 32 letters and digits after that. The key you had is kept."
-msgstr ""
+msgstr "Dat is geen Postilio-API-sleutel: die begint met pk_live_ of pk_test_ en heeft daarna 32 letters en cijfers. De sleutel die je had, blijft staan."
 
 #: src/Settings.php:117
 msgid "The sender address is not a valid email address. The address you had is kept."
-msgstr ""
+msgstr "Het afzenderadres is geen geldig e-mailadres. Het adres dat je had, blijft staan."

@@ -67,6 +67,17 @@ for dir in "$source"/vendor-prefixed/*/*/; do
     cp "$dir/LICENSE" "$stage/vendor-prefixed/$package/"
 done
 
+# Strauss names the autoloader with a random suffix; a fixed one per version keeps the build reproducible.
+suffix=$(sed -n 's/^return ComposerAutoloaderInit\([0-9a-f]\{32\}\)::getLoader();$/\1/p' "$stage/vendor-prefixed/autoload.php")
+fixed=$(printf 'postilio-for-wordpress-%s' "$version" | md5sum | cut -c1-32)
+if [ -z "$suffix" ]; then
+    echo "The autoloader's suffix was not found." >&2
+    exit 1
+fi
+grep -rl "$suffix" "$stage/vendor-prefixed" | while read -r file; do
+    sed -i "s/$suffix/$fixed/g" "$file"
+done
+
 # The checks on the package.
 cd "$work"
 find postilio-for-wordpress -type f | LC_ALL=C sort > files

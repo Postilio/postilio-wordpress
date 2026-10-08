@@ -49,7 +49,23 @@ git archive --format=tar HEAD | tar -x -C "$source"
 
 # What WordPress runs, and nothing else.
 cp "$source"/{postilio-for-wordpress.php,uninstall.php,readme.txt,LICENSE} "$stage/"
-cp -r "$source"/{src,assets,languages,vendor-prefixed} "$stage/"
+cp -r "$source"/{src,assets,languages} "$stage/"
+# Of the prefixed dependencies: the autoloader, and per package its code and its license.
+mkdir -p "$stage/vendor-prefixed"
+cp -r "$source/vendor-prefixed/autoload.php" "$source/vendor-prefixed/composer" "$stage/vendor-prefixed/"
+packages=()
+for dir in "$source"/vendor-prefixed/*/*/; do
+    package=${dir#"$source/vendor-prefixed/"}
+    package=${package%/}
+    packages+=("$package")
+    mkdir -p "$stage/vendor-prefixed/$package"
+    cp -r "$dir/src" "$stage/vendor-prefixed/$package/"
+    if [ ! -f "$dir/LICENSE" ]; then
+        echo "The license of $package is missing." >&2
+        exit 1
+    fi
+    cp "$dir/LICENSE" "$stage/vendor-prefixed/$package/"
+done
 
 # The checks on the package.
 cd "$work"
@@ -60,12 +76,10 @@ if [ -n "$unexpected" ]; then
     echo "$unexpected" >&2
     exit 1
 fi
-for license in nyholm/psr7 postilio/postilio-php psr/http-client psr/http-factory psr/http-message; do
-    if [ ! -f "postilio-for-wordpress/vendor-prefixed/$license/LICENSE" ]; then
-        echo "The license of $license is missing." >&2
-        exit 1
-    fi
-done
+if [ "${packages[*]}" != "nyholm/psr7 postilio/postilio-php psr/http-client psr/http-factory psr/http-message" ]; then
+    echo "The prefixed dependencies changed (${packages[*]}): check their licenses, then update this list." >&2
+    exit 1
+fi
 if grep -r -l -E '^namespace (Psr|Nyholm|Postilio|Http)\\' postilio-for-wordpress/vendor-prefixed; then
     echo "A dependency is not prefixed: it could clash with another plug-in's copy." >&2
     exit 1

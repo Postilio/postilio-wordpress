@@ -69,4 +69,8 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<exclude-pattern>/tests/</exclude-pattern>
 	</rule>
+	<!-- The tests compare the tag `wordpress`, which is not the name. -->
+	<rule ref="WordPress.WP.CapitalPDangit">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
 </ruleset>

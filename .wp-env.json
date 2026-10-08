@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/wp-env.json",
+  "core": null,
+  "phpVersion": "8.2",
+  "port": 28888,
+  "testsPort": 28889,
+  "plugins": ["./dist/postilio-for-wordpress"],
+  "mappings": {
+    "wp-content/mu-plugins/fake-postilio.php": "./tests/integration/fake-postilio.php",
+    "wp-content/postilio-integration": "./tests/integration"
+  },
+  "config": {
+    "POSTILIO_API_KEY": "pk_test_00000000000000000000000000000000",
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false
+  },
+  "env": {
+    "development": {
+      "config": { "POSTILIO_API_URL": "http://wordpress/fake-postilio" }
+    },
+    "tests": {
+      "config": { "POSTILIO_API_URL": "http://tests-wordpress/fake-postilio" }
+    }
+  }
+}

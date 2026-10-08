@@ -1,0 +1,284 @@
+# Postilio for WordPress.
+# This file is distributed under the GPL-2.0-or-later.
+#
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Postilio for WordPress 0.1.0-alpha.1\n"
+"Report-Msgid-Bugs-To: https://github.com/Postilio/postilio-wordpress/issues\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+
+
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/AdminPage.php:48
+msgid "Postilio"
+msgstr ""
+
+#: src/AdminPage.php:67 src/AdminPage.php:68 src/AdminPage.php:199
+msgid "API key"
+msgstr ""
+
+#: src/AdminPage.php:69
+msgid "Sender"
+msgstr ""
+
+#: src/AdminPage.php:70
+msgid "From address"
+msgstr ""
+
+#: src/AdminPage.php:71
+msgid "From name"
+msgstr ""
+
+#: src/AdminPage.php:72
+msgid "Force this sender"
+msgstr ""
+
+#: src/AdminPage.php:92
+msgid "Sending…"
+msgstr ""
+
+#: src/AdminPage.php:93
+msgid "The test email could not be sent: no answer from WordPress."
+msgstr ""
+
+#: src/AdminPage.php:94
+msgid "Message id"
+msgstr ""
+
+#: src/AdminPage.php:95 src/AdminPage.php:198
+msgid "Status"
+msgstr ""
+
+#: src/AdminPage.php:96
+msgid "Events"
+msgstr ""
+
+#: src/AdminPage.php:97
+msgid "Suppressed, not sent"
+msgstr ""
+
+#: src/AdminPage.php:98
+msgid "Error code"
+msgstr ""
+
+#: src/AdminPage.php:112
+msgid "Postilio for WordPress has no API key yet, so WordPress still sends its email itself."
+msgstr ""
+
+#: src/AdminPage.php:114
+msgid "Set it up"
+msgstr ""
+
+#: src/AdminPage.php:126
+msgid "Settings"
+msgstr ""
+
+#: src/AdminPage.php:145
+msgid "Send a test email"
+msgstr ""
+
+#: src/AdminPage.php:146
+msgid "Sends a short email through wp_mail(), the way your site sends all its email, and shows what Postilio answered. With a live key it is delivered and counts as usage; with a test key nothing is delivered."
+msgstr ""
+
+#: src/AdminPage.php:147
+msgid "Send to"
+msgstr ""
+
+#: src/AdminPage.php:149
+msgid "Send test email"
+msgstr ""
+
+#: src/AdminPage.php:159
+msgid "No API key yet: WordPress sends its email itself, as before. Set a key below, or better, in wp-config.php."
+msgstr ""
+
+#: src/AdminPage.php:164
+msgid "The API key is not a Postilio API key (pk_live_… or pk_test_…). No email is sent until it is."
+msgstr ""
+
+#: src/AdminPage.php:174
+msgid "from these settings"
+msgstr ""
+
+#: src/AdminPage.php:174
+msgid "from wp-config.php"
+msgstr ""
+
+#: src/AdminPage.php:175
+msgid "live key"
+msgstr ""
+
+#: src/AdminPage.php:175
+msgid "test key: nothing is delivered"
+msgstr ""
+
+#. translators: 1: the masked key, 2: live or test key, 3: where the key comes from.
+#: src/AdminPage.php:178
+#, php-format
+msgid "Accepted: %1$s, %2$s, %3$s."
+msgstr ""
+
+#. translators: 1: the masked key.
+#: src/AdminPage.php:180
+#, php-format
+msgid "Not accepted: Postilio does not know %1$s, or it was revoked."
+msgstr ""
+
+#. translators: 1: the masked key.
+#: src/AdminPage.php:182
+#, php-format
+msgid "Could not be checked: %1$s."
+msgstr ""
+
+#: src/AdminPage.php:190
+msgid "verified."
+msgstr ""
+
+#: src/AdminPage.php:191
+msgid "not verified yet: not all of its DNS records were found. Postilio refuses email from it until they are."
+msgstr ""
+
+#: src/AdminPage.php:192
+msgid "failing: a DNS record went missing. Postilio keeps sending for 72 hours, then refuses email from it until the record is back."
+msgstr ""
+
+#: src/AdminPage.php:193
+msgid "not a domain of this key's project. Postilio refuses email from it."
+msgstr ""
+
+#: src/AdminPage.php:194
+msgid "unknown: the key may not read domains (scope domains:manage, never on a test key). Send a test email to see whether Postilio takes it."
+msgstr ""
+
+#: src/AdminPage.php:200
+msgid "Sender domain"
+msgstr ""
+
+#. translators: %s: how long ago, such as "5 mins".
+#: src/AdminPage.php:203
+#, php-format
+msgid "Checked %s ago."
+msgstr ""
+
+#: src/AdminPage.php:206
+msgid "Check again"
+msgstr ""
+
+#: src/AdminPage.php:219
+msgid "OK"
+msgstr ""
+
+#: src/AdminPage.php:219
+msgid "Problem"
+msgstr ""
+
+#: src/AdminPage.php:219
+msgid "Unknown"
+msgstr ""
+
+#: src/AdminPage.php:225
+msgid "Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email's delivery here, and domains:manage to see the sender domain's status. Safest is the constant in wp-config.php, outside the database:"
+msgstr ""
+
+#. translators: %s: the masked key.
+#: src/AdminPage.php:234
+#, php-format
+msgid "Set in wp-config.php (POSTILIO_API_KEY): %s"
+msgstr ""
+
+#: src/AdminPage.php:241
+msgid "Stored in the database, not autoloaded, and never shown again."
+msgstr ""
+
+#. translators: %s: the masked key.
+#: src/AdminPage.php:243
+#, php-format
+msgid "A key is stored: %s. Enter a new one to replace it, or leave this empty to keep it."
+msgstr ""
+
+#: src/AdminPage.php:246
+msgid "Remove the stored key (WordPress then sends its email itself again)"
+msgstr ""
+
+#: src/AdminPage.php:252
+msgid "Postilio sends only from an address on a domain you verified in the key's project. WordPress sends as wordpress@ and your site's domain by default, which Postilio would refuse."
+msgstr ""
+
+#: src/AdminPage.php:259
+msgid "Such as no-reply@mail.example.com."
+msgstr ""
+
+#: src/AdminPage.php:266
+msgid "Without @ or a comma; Postilio does not take them in a name."
+msgstr ""
+
+#: src/AdminPage.php:273
+msgid "Send every email from this address and name"
+msgstr ""
+
+#: src/AdminPage.php:274
+msgid "On by default. Off: a From header of the plug-in that sends, and the wp_mail_from and wp_mail_from_name filters, choose the sender, as in WordPress itself; Postilio still refuses a sender outside your verified domains."
+msgstr ""
+
+#: src/AdminPage.php:281
+msgid "You may not do this."
+msgstr ""
+
+#: src/AdminPage.php:303
+msgid "You may not send a test email."
+msgstr ""
+
+#: src/AdminPage.php:307
+msgid "Enter a valid email address."
+msgstr ""
+
+#: src/AdminPage.php:312
+msgid "Set an API key first."
+msgstr ""
+
+#. translators: %s: the site's name.
+#: src/AdminPage.php:316
+#, php-format
+msgid "Test email from %s"
+msgstr ""
+
+#. translators: %s: the site's address.
+#: src/AdminPage.php:318
+#, php-format
+msgid ""
+"This is a test email from Postilio for WordPress on %s.\n"
+"\n"
+"If you can read this, your site sends its email through Postilio."
+msgstr ""
+
+#: src/AdminPage.php:325
+msgid "Another plug-in stopped the email before Postilio could send it."
+msgstr ""
+
+#. translators: %s: the recipient.
+#: src/AdminPage.php:333
+#, php-format
+msgid "Postilio accepted the email for %s."
+msgstr ""
+
+#: src/AdminPage.php:354
+msgid "This is the status right after sending; later events show in the Postilio portal."
+msgstr ""
+
+#: src/AdminPage.php:356
+msgid "Give the key the scope emails:read to see the delivery here, or look it up in the Postilio portal."
+msgstr ""
+
+#: src/Settings.php:111
+msgid "That is not a Postilio API key: it starts with pk_live_ or pk_test_ and has 32 letters and digits after that. The key you had is kept."
+msgstr ""
+
+#: src/Settings.php:117
+msgid "The sender address is not a valid email address. The address you had is kept."
+msgstr ""

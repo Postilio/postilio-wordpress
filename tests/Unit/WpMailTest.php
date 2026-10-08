@@ -61,7 +61,7 @@ final class WpMailTest extends TestCase {
 		self::assertSame( 'Hello', $request->subject );
 		self::assertSame( 'Hi Ada', $request->text );
 		self::assertNull( $request->html );
-		self::assertSame( 'wordpress', $request->tag ); // phpcs:ignore WordPress.WP.CapitalPDangit.MisspelledInText -- the tag, not the name.
+		self::assertSame( 'wordpress', $request->tag );
 		self::assertNull( $request->cc );
 		self::assertNull( $request->replyTo );
 		self::assertNull( $request->attachments );

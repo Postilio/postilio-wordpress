@@ -113,6 +113,9 @@ address in `to` (`422 cc_bcc_require_single_to`). So:
   `cc_bcc_require_single_to`), and nothing is sent. Postilio itself has no way to send it with the headers WordPress
   would write; how to map it is an open decision.
 - **Names** in To, Cc and Bcc are dropped: the API takes bare addresses there. The From and Reply-To names stay.
+- To, Cc and Bcc together hold at most 50 addresses, and the size times the recipients at most 25 MB. Over that,
+  Postilio refuses the email (`400`, or `413 message_too_large_for_recipients`) and `wp_mail()` returns false; a call
+  without Cc or Bcc is split into several requests instead.
 
 ### Attachments
 

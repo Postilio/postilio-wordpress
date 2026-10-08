@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<ruleset name="Postilio for WordPress">
+	<description>The WordPress coding standards, security sniffs included: escaping, nonces, sanitising, capabilities.</description>
+
+	<file>postilio-for-wordpress.php</file>
+	<file>uninstall.php</file>
+	<file>src</file>
+	<file>tests</file>
+
+	<arg name="extensions" value="php"/>
+	<arg name="cache" value=".phpcs.cache"/>
+	<arg value="sp"/>
+
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<rule ref="WordPress"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="postilio-for-wordpress"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="postilio"/>
+				<element value="PostilioWp"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- The SDK's models name their properties in camelCase, as the API does. -->
+	<rule ref="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase">
+		<exclude-pattern>/src/</exclude-pattern>
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+
+	<!-- Classes are autoloaded by PSR-4 file names. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>/src/</exclude-pattern>
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+
+	<!-- The tests: PHPUnit's own names and doubles of WordPress. -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Commenting.DocComment">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Files.OneObjectStructurePerFile">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<!-- The tests compare the tag `wordpress`, which is not the name. -->
+	<rule ref="WordPress.WP.CapitalPDangit">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+</ruleset>

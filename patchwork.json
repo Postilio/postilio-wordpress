@@ -1,0 +1,3 @@
+{
+  "blacklist": ["src/", "vendor-prefixed/"]
+}

@@ -1,0 +1,81 @@
+{
+  "name": "postilio/postilio-wordpress",
+  "description": "Postilio for WordPress: send WordPress email through Postilio, European transactional email.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://postilio.eu",
+  "support": {
+    "docs": "https://docs.postilio.eu",
+    "source": "https://github.com/Postilio/postilio-wordpress",
+    "issues": "https://github.com/Postilio/postilio-wordpress/issues",
+    "security": "https://github.com/Postilio/postilio-wordpress/security/policy"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Postilio/postilio-php"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "nyholm/psr7": "^1.8",
+    "postilio/postilio-php": "dev-main#8d012a04d008d3dd94b1f2ac488e1d1139503097"
+  },
+  "require-dev": {
+    "brain/monkey": "^2.6",
+    "brianhenryie/strauss": "^0.30",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "infection/infection": "^0.29 || ^0.30 || ^0.31",
+    "php-stubs/wordpress-stubs": "^7.0",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^11.5",
+    "szepeviktor/phpstan-wordpress": "^2.0",
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "minimum-stability": "stable",
+  "autoload-dev": {
+    "psr-4": {
+      "PostilioWp\\": "src/",
+      "PostilioWp\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "platform": {
+      "php": "8.2.0"
+    },
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "infection/extension-installer": true
+    }
+  },
+  "extra": {
+    "strauss": {
+      "target_directory": "vendor-prefixed",
+      "namespace_prefix": "PostilioWp\\Vendor\\",
+      "classmap_prefix": "PostilioWp_Vendor_",
+      "constant_prefix": "POSTILIO_WP_VENDOR_",
+      "packages": [
+        "postilio/postilio-php",
+        "nyholm/psr7"
+      ],
+      "delete_vendor_packages": false,
+      "include_modified_date": false,
+      "include_author": false
+    }
+  },
+  "scripts": {
+    "prefix": "strauss",
+    "post-install-cmd": [
+      "@prefix"
+    ],
+    "post-update-cmd": [
+      "@prefix"
+    ],
+    "test": "phpunit",
+    "stan": "phpstan analyse --memory-limit=1G",
+    "cs": "phpcs",
+    "cs:fix": "phpcbf",
+    "mutation": "infection --threads=max --initial-tests-php-options='-d pcov.enabled=1'"
+  }
+}

@@ -1,0 +1,11 @@
+/build/
+/dist/
+.env
+.idea/
+/node_modules/
+.phpcs.cache
+/.phpunit.cache/
+/vendor/
+/vendor-prefixed/
+.vscode/
+.wp-env.override.json

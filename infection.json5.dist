@@ -1,0 +1,16 @@
+{
+  "$schema": "vendor/infection/infection/resources/schema.json",
+  "source": {
+    "directories": ["src"]
+  },
+  "bootstrap": "tests/bootstrap.php",
+  "timeout": 30,
+  "tmpDir": "build",
+  "logs": {
+    "text": "build/infection.log",
+    "summary": "build/infection-summary.log"
+  },
+  "mutators": {
+    "@default": true
+  }
+}

@@ -70,7 +70,7 @@ done
 # The checks on the package.
 cd "$work"
 find postilio-for-wordpress -type f | LC_ALL=C sort > files
-unexpected=$(grep -v -E '^postilio-for-wordpress/((postilio-for-wordpress|uninstall)\.php|readme\.txt|LICENSE|src/[A-Za-z]+\.php|assets/admin\.js|languages/postilio-for-wordpress(-nl_NL)?\.(pot|po|mo|l10n\.php)|vendor-prefixed/(autoload\.php|composer/[A-Za-z_]+\.(php|json)|composer/LICENSE|[a-z0-9-]+/[a-z0-9-]+/(LICENSE|src/.+\.php)))$' files || true)
+unexpected=$(grep -v -E '^postilio-for-wordpress/((postilio-for-wordpress|uninstall)\.php|readme\.txt|LICENSE|src/[A-Za-z]+\.php|assets/admin\.js|languages/postilio-for-wordpress(-nl_NL)?\.(pot|po|mo|l10n\.php)|vendor-prefixed/(autoload\.php|composer/[A-Za-z0-9_]+\.(php|json)|composer/LICENSE|[a-z0-9-]+/[a-z0-9-]+/(LICENSE|src/.+\.php)))$' files || true)
 if [ -n "$unexpected" ]; then
     echo "The ZIP would hold files it should not:" >&2
     echo "$unexpected" >&2

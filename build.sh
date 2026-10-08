@@ -37,8 +37,9 @@ mkdir "$source" "$stage"
 git archive --format=tar HEAD | tar -x -C "$source"
 (
     cd "$source"
-    composer validate --strict --no-interaction
-    composer install --no-interaction --no-progress --quiet
+    # Not --strict: the SDK is pinned to a commit until it has a release tag, which composer warns about.
+    composer validate --no-interaction --quiet
+    COMPOSER_ROOT_VERSION="$version" composer install --no-interaction --no-progress --quiet
     if [ "$checks" = 1 ]; then
         vendor/bin/phpcs -q
         vendor/bin/phpstan analyse --memory-limit=1G --no-progress --quiet

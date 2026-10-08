@@ -76,7 +76,7 @@ final class WpMail {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- a WordPress core hook, applied as wp_mail() applies it.
 		$content_type = Settings::text( apply_filters( 'wp_mail_content_type', $content_type ) );
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- a WordPress core hook, applied as wp_mail() applies it.
-		$charset = Settings::text( apply_filters( 'wp_mail_charset', $headers['charset'] ?? ( str_starts_with( strtolower( $content_type ), 'multipart/' ) ? '' : get_bloginfo( 'charset' ) ) ) );
+		$charset = Settings::text( apply_filters( 'wp_mail_charset', $headers['charset'] ?? get_bloginfo( 'charset' ) ) );
 
 		$subject         = self::to_utf8( trim( str_replace( array( "\r", "\n" ), '', Settings::text( $atts['subject'] ?? '' ) ) ), $charset );
 		[ $text, $html ] = self::bodies( Settings::text( $atts['message'] ?? '' ), $content_type, $headers['boundary'], $charset );
@@ -100,11 +100,8 @@ final class WpMail {
 			$attachments[] = new EmailAttachment( $file['name'], $file['type'], Settings::text( file_get_contents( $file['path'] ) ), $file['cid'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- a local file.
 		}
 
-		if ( array() !== $cc || array() !== $bcc ) {
-			$groups = array( $to );
-		} else {
-			$groups = array_chunk( $to, max( 1, min( self::MAX_RECIPIENTS, intdiv( self::MAX_SIZE_TIMES_RECIPIENTS, max( 1, $size ) ) ) ) );
-		}
+		// With Cc or Bcc there is one To address, so one request. $size is 1 byte to 10 MB, so at least 2 per request.
+		$groups = array_chunk( $to, max( 1, min( self::MAX_RECIPIENTS, intdiv( self::MAX_SIZE_TIMES_RECIPIENTS, $size ) ) ) );
 
 		$requests = array();
 		foreach ( $groups as $group ) {
@@ -148,10 +145,7 @@ final class WpMail {
 			'reply_to'     => array(),
 			'custom'       => array(),
 		);
-		if ( empty( $headers ) ) {
-			return $parsed;
-		}
-		$lines = is_array( $headers ) ? $headers : explode( "\n", str_replace( "\r\n", "\n", Settings::text( $headers ) ) );
+		$lines  = is_array( $headers ) ? $headers : explode( "\n", Settings::text( $headers ) );
 
 		foreach ( $lines as $line ) {
 			$line = Settings::text( $line );
@@ -322,7 +316,7 @@ final class WpMail {
 			}
 		}
 
-		return array_column( array_values( $kept ), 1, 0 );
+		return array_column( $kept, 1, 0 );
 	}
 
 	/**
@@ -337,15 +331,10 @@ final class WpMail {
 	 */
 	private static function bodies( string $message, string $content_type, ?string $boundary, string $charset ): array {
 		$type = strtolower( trim( explode( ';', $content_type, 2 )[0] ) );
-		if ( str_starts_with( $type, 'multipart/' ) ) {
-			if ( 1 === preg_match( '/boundary\s*=\s*"?([^";]+)"?/i', $content_type, $match ) ) {
-				$boundary = trim( $match[1] );
-			}
-			if ( null !== $boundary && '' !== $boundary ) {
-				[ $text, $html ] = self::multipart( $message, $boundary );
-				if ( null !== $text || null !== $html ) {
-					return array( $text, $html );
-				}
+		if ( str_starts_with( $type, 'multipart/' ) && null !== $boundary && '' !== $boundary ) {
+			[ $text, $html ] = self::multipart( $message, $boundary );
+			if ( null !== $text || null !== $html ) {
+				return array( $text, $html );
 			}
 		}
 		$body = self::to_utf8( $message, $charset );
@@ -394,7 +383,7 @@ final class WpMail {
 	 * @param string $charset Its charset; empty for UTF-8.
 	 */
 	private static function to_utf8( string $text, string $charset ): string {
-		if ( '' === $charset || 0 === strcasecmp( $charset, 'utf-8' ) || ! function_exists( 'mb_convert_encoding' ) ) {
+		if ( ! function_exists( 'mb_convert_encoding' ) ) {
 			return $text;
 		}
 		foreach ( mb_list_encodings() as $known ) {

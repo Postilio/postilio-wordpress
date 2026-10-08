@@ -49,7 +49,7 @@ final class WpHttpClient implements ClientInterface {
 				'body'        => (string) $request->getBody(),
 				'timeout'     => $this->timeout,
 				'redirection' => 0,
-				'user-agent'  => ltrim( $user_agent ),
+				'user-agent'  => $user_agent,
 			)
 		);
 		if ( is_wp_error( $answer ) ) {

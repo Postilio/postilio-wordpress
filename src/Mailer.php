@@ -77,14 +77,15 @@ final class Mailer {
 		}
 		try {
 			$requests = WpMail::translate( $atts, $this->settings, $this->now ?? time() );
+			// Only a call without Cc or Bcc is split into several requests, so counting To is enough.
 			foreach ( $requests as $item ) {
-				$total += count( $item['request']->to ) + count( $item['request']->cc ?? array() ) + count( $item['request']->bcc ?? array() );
+				$total += count( $item['request']->to );
 			}
 			foreach ( $requests as $item ) {
 				$response   = $this->client->sendEmail( $item['request'], $item['key'] );
 				$ids        = array_merge( $ids, $response->ids );
 				$suppressed = array_merge( $suppressed, $response->suppressed );
-				$accepted  += count( $item['request']->to ) + count( $item['request']->cc ?? array() ) + count( $item['request']->bcc ?? array() );
+				$accepted  += count( $item['request']->to );
 			}
 		} catch ( MailError $e ) {
 			return $this->fail( $mail_data, $e->error, 'Postilio for WordPress did not send the email (' . $e->error . '): ' . $e->getMessage(), null, null, $ids, $suppressed );

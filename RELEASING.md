@@ -36,7 +36,8 @@ be, see [WordPress.org](#wordpressorg-later).
 
    `build.sh` packs the last commit only, and refuses a ZIP with development files, an unprefixed dependency, a missing
    license or anything that looks like a key. The same commit gives the same ZIP, byte for byte, so anyone can check the
-   released ZIP against the tag by building it again.
+   released ZIP against the tag by building it again, with Composer from getcomposer.org: a Composer packaged by a
+   Linux distribution may ship a patched `InstalledVersions.php` (Fedora's does), which then differs in the ZIP.
 5. **The manual test** below, on a site with a real Postilio project.
 6. **Commit** (`chore: release 0.2.0`) through a pull request, then tag the merged commit signed and push the tag:
 
@@ -45,8 +46,11 @@ be, see [WordPress.org](#wordpressorg-later).
    git push origin v0.2.0
    ```
 
-7. **The GitHub release** for the tag: the changelog's section as the text, `build.sh`'s ZIP and its sha256 as assets,
-   marked as a pre-release for a version with a suffix. Build the ZIP from the tagged commit.
+7. **The GitHub release** follows from the tag: the `release` workflow checks that the tag is `v` plus the plug-in's
+   version, runs `build.sh` on the tagged commit, and creates the release with the changelog's section as the text and
+   the ZIP and its sha256 as assets, marked as a pre-release for a version with a suffix. A release made by hand for the
+   tag beforehand keeps its text; the workflow adds the ZIP to it, so a re-run is safe. A failure that needs a change in
+   the code needs a new patch version, since the workflow builds the tagged commit.
 
 A tag is never moved or reused: a broken release gets a new patch version.
 
@@ -89,18 +93,17 @@ On a WordPress site (a staging site is fine) and a Postilio project with a verif
 
 ## Continuous integration
 
-There is no workflow in this repository; whether to add one is the owner's decision, since GitHub Actions minutes cost
-money. A workflow would, on every pull request and push to `main`:
+Two workflows in `.github/workflows`:
 
-| Job | Steps |
-|---|---|
-| `checks` (PHP 8.4, ubuntu-latest) | checkout, `shivammathur/setup-php`, `./build.sh` (composer, phpcs, phpstan, phpunit, the ZIP and its checks), upload the ZIP as an artifact |
-| `unit` (matrix PHP 8.2, 8.3, 8.4, 8.5) | checkout, setup-php, `composer install`, `vendor/bin/phpunit` |
-| `integration` (matrix: PHP 8.2 + WordPress 6.4, PHP 8.3 + latest, PHP 8.4 + latest) | checkout, setup-php, setup-node, the ZIP from `checks`, `tests/integration/run.sh <php> <wordpress>` (wp-env runs on the runner's docker) |
+| Workflow | When | Jobs |
+|---|---|---|
+| `build` | every pull request and push to `main` | `build` (matrix PHP 8.2, 8.3, 8.4, 8.5): `./build.sh`, so composer, phpcs, phpstan, phpunit, the ZIP and its checks; the ZIP of PHP 8.4 as an artifact. `integration` (PHP 8.2 + WordPress 6.4, PHP 8.5 + latest, the oldest and the newest the plug-in supports): `tests/integration/run.sh <php> <wordpress>`, wp-env on the runner's docker |
+| `release` | a pushed tag `v*` | see step 7 above; the only job with write access (`contents: write`), and it needs no secret beyond the default `GITHUB_TOKEN` |
 
-Actions pinned to a commit SHA, with the version as a comment. A release workflow could build the ZIP from the tag and
-attach it to the GitHub release; it needs no secret beyond the default `GITHUB_TOKEN`. Never attach a self-hosted
-runner to a public repository: a pull request from a fork would run its code on that machine.
+GitHub Actions minutes cost money, so the integration matrix stays at two pairs and mutation testing stays local.
+Actions are pinned to a commit hash with the version as a comment; to bump one, take the commit of the new tag
+(`gh api repos/<owner>/<action>/commits/<tag> --jq .sha`) and let a release be a few days old first. Never attach a
+self-hosted runner to a public repository: a pull request from a fork would run its code on that machine.
 
 ## WordPress.org (later)
 

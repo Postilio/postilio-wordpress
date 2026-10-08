@@ -12,3 +12,6 @@ parameters:
     - uninstall.php
     - src
     - tests
+  # Run inside wp-env by tests/integration/run.sh, where WP-CLI and the built ZIP are loaded.
+  excludePaths:
+    - tests/integration

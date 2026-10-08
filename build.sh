@@ -42,7 +42,7 @@ git archive --format=tar HEAD | tar -x -C "$source"
     COMPOSER_ROOT_VERSION="$version" composer install --no-interaction --no-progress --quiet
     if [ "$checks" = 1 ]; then
         vendor/bin/phpcs -q
-        vendor/bin/phpstan analyse --memory-limit=1G --no-progress --quiet
+        vendor/bin/phpstan analyse --memory-limit=1G --no-progress
         vendor/bin/phpunit --no-progress
     fi
 )

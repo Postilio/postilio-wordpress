@@ -44,4 +44,9 @@ final class PluginTest extends TestCase {
 		$this->options['postilio_api_key'] = '';
 		self::assertNull( Plugin::mailer() );
 	}
+
+	public function test_client_is_made_for_a_postilio_key_only(): void {
+		self::assertNotNull( Plugin::client( 'pk_live_abcdEFGH0123456789abcdefghijklmn' ) );
+		self::assertNull( Plugin::client( 'xx_live_abcdEFGH0123456789abcdefghijklmn' ) );
+	}
 }

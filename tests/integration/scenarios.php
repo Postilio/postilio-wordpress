@@ -57,6 +57,7 @@ $settings = array(
 );
 update_option( 'postilio_settings', $settings );
 
+file_put_contents( WP_CONTENT_DIR . '/debug.log', '' ); // This run's lines only.
 WP_CLI::log( 'WordPress ' . get_bloginfo( 'version' ) . ', PHP ' . PHP_VERSION );
 $check( 'the plug-in is active', is_plugin_active( 'postilio-for-wordpress/postilio-for-wordpress.php' ) );
 
@@ -114,6 +115,11 @@ $sent      = wp_mail( 'fail@example.test', 'Hello', 'Hi' );
 $check( 'an API refusal makes wp_mail() return false', false === $sent );
 $check( 'and fires wp_mail_failed with the Postilio code', 1 === count( $failures ) && 'service_degraded' === $code( $failures ), array_map( static fn( $e ) => $e->get_error_message(), $failures ) );
 $check( 'and does not fall back to PHPMailer or mail()', false === $phpmailer );
+$debug_log = is_file( WP_CONTENT_DIR . '/debug.log' ) ? (string) file_get_contents( WP_CONTENT_DIR . '/debug.log' ) : '';
+$check(
+	'and writes one line to the PHP error log, without the recipient or the key',
+	str_contains( $debug_log, 'Postilio for WordPress: POST /v1/emails answered 503 (service_degraded).' ) && ! str_contains( $debug_log, 'fail@example.test' ) && ! str_contains( $debug_log, POSTILIO_API_KEY )
+);
 
 // Without force, the plug-in's From header is used, and Postilio refuses a domain that is not verified.
 update_option( 'postilio_settings', array( 'force_from' => false ) + $settings );

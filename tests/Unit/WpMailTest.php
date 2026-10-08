@@ -77,7 +77,7 @@ final class WpMailTest extends TestCase {
 			'comma-separated string'   => array( 'ada@example.org, grace@example.org', array( 'ada@example.org', 'grace@example.org' ) ),
 			'array'                    => array( array( 'ada@example.org', 'grace@example.org' ), array( 'ada@example.org', 'grace@example.org' ) ),
 			'names are dropped'        => array( array( 'Ada Lovelace <ada@example.org>', '"Grace" <grace@example.org>' ), array( 'ada@example.org', 'grace@example.org' ) ),
-			'duplicates once, in case' => array( 'ada@example.org,ADA@example.org', array( 'ada@example.org' ) ),
+			'duplicates once, in case' => array( 'ADA@example.org,ada@example.org', array( 'ADA@example.org' ) ),
 			'invalid ones skipped'     => array( 'not-an-address, ada@example.org', array( 'ada@example.org' ) ),
 		);
 	}
@@ -93,6 +93,19 @@ final class WpMailTest extends TestCase {
 		self::assertSame( $expected, $this->translate( array( 'to' => $to ) )[0]['request']->to );
 	}
 
+	public function test_translate_gives_cc_and_bcc_without_a_to_address_each_a_copy_of_their_own(): void {
+		$request = $this->translate(
+			array(
+				'to'      => '',
+				'headers' => array( 'Cc: grace@example.org', 'Bcc: archive@example.org' ),
+			)
+		)[0]['request'];
+
+		self::assertSame( array( 'grace@example.org', 'archive@example.org' ), $request->to );
+		self::assertNull( $request->cc );
+		self::assertNull( $request->bcc );
+	}
+
 	public function test_translate_refuses_a_call_without_a_valid_recipient(): void {
 		self::assertRefused( 'no_recipients', fn() => $this->translate( array( 'to' => 'nobody' ) ) );
 	}
@@ -100,7 +113,9 @@ final class WpMailTest extends TestCase {
 	public function test_translate_reads_headers_given_as_a_string_as_given_as_an_array(): void {
 		$lines = array(
 			'Cc: grace@example.org',
+			'Cc: alan@example.org',
 			'Bcc: Archive <archive@example.org>',
+			'Bcc: backup@example.org',
 			'Reply-To: Support <support@example.org>, other@example.org',
 			'Content-Type: text/html; charset=UTF-8',
 			'X-Order-Id: 1042',
@@ -110,8 +125,8 @@ final class WpMailTest extends TestCase {
 		$from_string = $this->translate( array( 'headers' => implode( "\r\n", $lines ) ) )[0]['request'];
 
 		self::assertEquals( $from_array, $from_string );
-		self::assertSame( array( 'grace@example.org' ), $from_array->cc );
-		self::assertSame( array( 'archive@example.org' ), $from_array->bcc );
+		self::assertSame( array( 'grace@example.org', 'alan@example.org' ), $from_array->cc );
+		self::assertSame( array( 'archive@example.org', 'backup@example.org' ), $from_array->bcc );
 		self::assertSame( 'Support <support@example.org>', $from_array->replyTo );
 		self::assertSame( 'Hi Ada', $from_array->html );
 		self::assertNull( $from_array->text );
@@ -175,8 +190,8 @@ final class WpMailTest extends TestCase {
 	 */
 	public static function multipart_headers(): array {
 		return array(
-			'boundary in the content type' => array( array( 'Content-Type: multipart/alternative; boundary="b1"' ) ),
-			'boundary on its own line'     => array( array( 'Content-Type: multipart/alternative', 'boundary="b1"' ) ),
+			'boundary in the content type' => array( array( 'Content-Type: multipart/alternative; boundary="=_b+1"' ) ),
+			'boundary on its own line'     => array( array( 'boundary="=_b+1"', 'Content-Type: multipart/alternative' ) ),
 		);
 	}
 
@@ -187,9 +202,11 @@ final class WpMailTest extends TestCase {
 	 */
 	#[DataProvider( 'multipart_headers' )]
 	public function test_translate_takes_text_and_html_from_a_multipart_alternative_body( array $headers ): void {
-		$body = "--b1\r\nContent-Type: text/plain; charset=ISO-8859-1\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\nCaf=E9 open\r\n"
-			. "--b1\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . base64_encode( '<p>Café open</p>' ) . "\r\n"
-			. "--b1--\r\n";
+		// An attachment first and HTML before text, the Content-Type not on a part's first line, a blank line inside the text.
+		$body = "--=_b+1\r\nContent-Type: application/octet-stream\r\n\r\nbinary\r\n"
+			. "--=_b+1\r\nContent-Transfer-Encoding: base64\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n" . base64_encode( '<p>Café open</p>' ) . "\r\n"
+			. "--=_b+1\r\nContent-Transfer-Encoding: quoted-printable\r\nContent-Type: text/plain; charset=ISO-8859-1\r\n\r\nCaf=E9 open\r\n\r\nBye\r\n"
+			. "--=_b+1--\r\n";
 
 		$request = $this->translate(
 			array(
@@ -198,8 +215,31 @@ final class WpMailTest extends TestCase {
 			)
 		)[0]['request'];
 
-		self::assertSame( 'Café open', $request->text );
+		self::assertSame( "Café open\r\n\r\nBye", $request->text );
 		self::assertSame( '<p>Café open</p>', $request->html );
+	}
+
+	public function test_translate_passes_the_multipart_boundary_to_the_content_type_filter_as_wordpress_does(): void {
+		Filters\expectApplied( 'wp_mail_content_type' )->once()->with( 'multipart/alternative; boundary="b1"' )->andReturnFirstArg();
+
+		$this->translate( array( 'headers' => array( 'Content-Type: multipart/alternative', 'boundary="b1"' ) ) );
+	}
+
+	public function test_translate_sends_a_multipart_body_with_only_html_as_html(): void {
+		$request = $this->translate(
+			array(
+				'headers' => 'Content-Type: multipart/alternative; boundary="b1"',
+				'message' => "--b1\r\nContent-Type: text/html\r\n\r\n<p>Hi</p>\r\n--b1--",
+			)
+		)[0]['request'];
+
+		self::assertSame( array( null, '<p>Hi</p>' ), array( $request->text, $request->html ) );
+	}
+
+	public function test_translate_sends_a_multipart_body_without_text_or_html_parts_as_text(): void {
+		$request = $this->translate( array( 'headers' => 'Content-Type: multipart/alternative; boundary="b1"' ) )[0]['request'];
+
+		self::assertSame( 'Hi Ada', $request->text );
 	}
 
 	public function test_translate_converts_the_charset_to_utf8(): void {
@@ -224,12 +264,15 @@ final class WpMailTest extends TestCase {
 					'Importance: high',
 					'X-Postilio-Tenant: 1',
 					'X-Accented: Café',
+					"X-Control: a\x01b",
+					'Not-X-Header: 1',
+					'X-Has Space: 1',
 					'List-Unsubscribe: <https://example.com/u/1>',
 					'List-Unsubscribe-Post: List-Unsubscribe=One-Click',
 					'In-Reply-To: <1@example.com>',
 					'References: <1@example.com>',
-					'X-A: 1',
-					'X-B: 2',
+					'x-lower: 1',
+					'X-My-Kumo: 2',
 					'X-C: 3',
 					'X-D: 4',
 					'X-E: 5',
@@ -245,8 +288,8 @@ final class WpMailTest extends TestCase {
 				'List-Unsubscribe-Post' => 'List-Unsubscribe=One-Click',
 				'In-Reply-To'           => '<1@example.com>',
 				'References'            => '<1@example.com>',
-				'X-A'                   => '1',
-				'X-B'                   => '2',
+				'x-lower'               => '1',
+				'X-My-Kumo'             => '2',
 				'X-C'                   => '3',
 				'X-D'                   => '4',
 				'X-E'                   => '5',
@@ -257,7 +300,7 @@ final class WpMailTest extends TestCase {
 	}
 
 	public function test_translate_strips_line_breaks_from_the_subject(): void {
-		self::assertSame( 'Hello there', $this->translate( array( 'subject' => "Hello\r\n there" ) )[0]['request']->subject );
+		self::assertSame( 'Hello there', $this->translate( array( 'subject' => " Hello\r\n there " ) )[0]['request']->subject );
 	}
 
 	public function test_translate_refuses_an_empty_message(): void {
@@ -298,6 +341,16 @@ final class WpMailTest extends TestCase {
 		self::assertSame( 'application/octet-stream', $attachments[1]->contentType );
 	}
 
+	public function test_translate_takes_no_attachments_from_empty_lines(): void {
+		self::assertNull( $this->translate( array( 'attachments' => " \n" ) )[0]['request']->attachments );
+	}
+
+	public function test_translate_attaches_a_file_with_a_colon_in_its_name(): void {
+		$file = $this->file( 'meeting at:noon.txt', 'A' );
+
+		self::assertNotNull( $this->translate( array( 'attachments' => array( $file ) ) )[0]['request']->attachments );
+	}
+
 	/**
 	 * Attachments the plug-in refuses, where WordPress would skip them without a word.
 	 *
@@ -308,6 +361,7 @@ final class WpMailTest extends TestCase {
 			'missing file'    => array( '/nonexistent/file.pdf' ),
 			'directory'       => array( '/tmp' ),
 			'stream wrapper'  => array( 'phar:///tmp/x.phar/file.pdf' ),
+			'in capitals'     => array( 'PHAR:///tmp/x.phar/file.pdf' ),
 			'url'             => array( 'https://example.com/file.pdf' ),
 			'parent segments' => array( '/tmp/../etc/hostname' ),
 		);
@@ -323,20 +377,41 @@ final class WpMailTest extends TestCase {
 		self::assertRefused( 'attachment_not_readable', fn() => $this->translate( array( 'attachments' => array( $path ) ) ) );
 	}
 
-	public function test_translate_refuses_more_than_twenty_attachments(): void {
+	public function test_translate_takes_twenty_attachments_and_refuses_more(): void {
 		$file = $this->file( 'a.txt', 'A' );
 
+		self::assertCount( 20, $this->translate( array( 'attachments' => array_fill( 0, 20, $file ) ) )[0]['request']->attachments ?? array() );
 		self::assertRefused( 'too_many_attachments', fn() => $this->translate( array( 'attachments' => array_fill( 0, 21, $file ) ) ) );
 	}
 
-	public function test_translate_refuses_a_message_over_ten_megabytes_before_reading_it(): void {
-		$file   = $this->file( 'big.bin', '' );
-		$handle = fopen( $file, 'r+' );
+	public function test_translate_sends_an_email_of_exactly_ten_megabytes(): void {
+		self::assertCount( 1, $this->translate( $this->email_of( 10 * 1024 * 1024 ) ) );
+	}
+
+	public function test_translate_refuses_a_byte_more_than_ten_megabytes_before_reading_it(): void {
+		self::assertRefused( 'message_too_large', fn() => $this->translate( $this->email_of( 10 * 1024 * 1024 + 1 ) ) );
+	}
+
+	/**
+	 * An email of the size given, counted as the API counts it: every field and the embed's name, type and Content-ID.
+	 *
+	 * @param int $size The size in bytes.
+	 *
+	 * @return array<string, mixed> The wp_mail() arguments that differ from the defaults.
+	 */
+	private function email_of( int $size ): array {
+		// From 32, Reply-To 8, subject 5, tag 9, text 6, html 9, header 3 + 1, embed name 8, type 9 and Content-ID 4.
+		$png    = $this->file( 'logo.png', '' );
+		$handle = fopen( $png, 'r+' );
 		self::assertNotFalse( $handle );
-		ftruncate( $handle, 10 * 1024 * 1024 + 1 ); // Sparse: takes no disk space.
+		ftruncate( $handle, max( 0, $size - 94 ) ); // Sparse: takes no disk space.
 		fclose( $handle );
 
-		self::assertRefused( 'message_too_large', fn() => $this->translate( array( 'attachments' => array( $file ) ) ) );
+		return array(
+			'headers' => array( 'Reply-To: r@x.test', 'Content-Type: multipart/alternative; boundary="b"', 'X-A: 1' ),
+			'message' => "--b\r\nContent-Type: text/plain\r\n\r\nHi Ada\r\n--b\r\nContent-Type: text/html\r\n\r\n<p>Hi</p>\r\n--b--",
+			'embeds'  => array( 'logo' => $png ),
+		);
 	}
 
 	public function test_translate_sends_cc_and_bcc_with_a_single_recipient_as_they_are(): void {
@@ -399,6 +474,8 @@ final class WpMailTest extends TestCase {
 		self::assertSame( $first[0]['key'], $second[0]['key'] );
 		self::assertNotSame( $first[0]['key'], $other[0]['key'] );
 		self::assertNotSame( $first[0]['key'], $later[0]['key'] );
+		Functions\when( 'home_url' )->justReturn( 'https://other.example.com' );
+		self::assertNotSame( $first[0]['key'], $this->translate( array(), null, self::NOW )[0]['key'] );
 		self::assertMatchesRegularExpression( '/^wp-[0-9a-f]{64}$/', $first[0]['key'] );
 	}
 

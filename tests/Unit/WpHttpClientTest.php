@@ -12,6 +12,7 @@ namespace PostilioWp\Tests\Unit;
 use Brain\Monkey\Functions;
 use PostilioWp\Vendor\Nyholm\Psr7\Factory\Psr17Factory;
 use PostilioWp\Vendor\Psr\Http\Client\NetworkExceptionInterface;
+use PostilioWp\Plugin;
 use PostilioWp\WpHttpClient;
 
 final class WpHttpClientTest extends TestCase {
@@ -51,7 +52,7 @@ final class WpHttpClientTest extends TestCase {
 		self::assertSame( 15.0, $args['timeout'] );
 		self::assertSame( 0, $args['redirection'] );
 		self::assertSame( 'Bearer pk_test_x', $args['headers']['Authorization'] );
-		self::assertStringStartsWith( 'postilio-php/0.1.0 postilio-for-wordpress/', $args['user-agent'] );
+		self::assertSame( 'postilio-php/0.1.0 postilio-for-wordpress/' . Plugin::VERSION, $args['user-agent'] );
 		self::assertArrayNotHasKey( 'User-Agent', $args['headers'] );
 		self::assertArrayNotHasKey( 'sslverify', $args );
 		self::assertSame( 202, $response->getStatusCode() );

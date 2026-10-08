@@ -52,6 +52,7 @@ final class AdminPageTest extends TestCase {
 		$answer = $this->answer( static fn() => ( new AdminPage( '/plugins/postilio-for-wordpress/postilio-for-wordpress.php' ) )->ajax_send_test() );
 
 		self::assertSame( 403, $answer->status );
+		self::assertSame( array( 'message' => 'You may not send a test email.' ), $answer->data );
 	}
 
 	public function test_ajax_send_test_refuses_a_recipient_that_is_not_an_address(): void {
@@ -63,14 +64,15 @@ final class AdminPageTest extends TestCase {
 		$answer = $this->answer( static fn() => ( new AdminPage( '/plugins/postilio-for-wordpress/postilio-for-wordpress.php' ) )->ajax_send_test() );
 
 		self::assertSame( 400, $answer->status );
+		self::assertSame( array( 'message' => 'Enter a valid email address.' ), $answer->data );
 	}
 
 	public function test_refresh_status_checks_the_nonce_and_the_capability(): void {
 		Functions\expect( 'check_admin_referer' )->once()->with( 'postilio_refresh_status' )->andReturn( 1 );
 		Functions\expect( 'current_user_can' )->once()->with( 'manage_options' )->andReturn( false );
 		Functions\expect( 'wp_die' )->once()->andReturnUsing(
-			static function () {
-				throw new JsonAnswer( false, null, 403 );
+			static function ( $message, $title, $args ) {
+				throw new JsonAnswer( false, $message, is_array( $args ) ? $args['response'] ?? null : null );
 			}
 		);
 		Functions\expect( 'delete_transient' )->never();

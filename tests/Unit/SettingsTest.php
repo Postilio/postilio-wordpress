@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace PostilioWp\Tests\Unit;
 
 use Brain\Monkey\Functions;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PostilioWp\Settings;
@@ -27,6 +28,8 @@ final class SettingsTest extends TestCase {
 
 	public function test_load_forces_the_sender_unless_it_was_turned_off(): void {
 		Functions\when( 'get_option' )->justReturn( false );
+		self::assertTrue( Settings::load()->force_from );
+		Functions\when( 'get_option' )->justReturn( array( 'from_email' => 'no-reply@mail.example.com' ) );
 		self::assertTrue( Settings::load()->force_from );
 
 		Functions\when( 'get_option' )->justReturn(
@@ -50,7 +53,7 @@ final class SettingsTest extends TestCase {
 	#[RunInSeparateProcess]
 	#[PreserveGlobalState( false )]
 	public function test_api_key_comes_from_the_constant_before_the_option(): void {
-		define( 'POSTILIO_API_KEY', self::KEY );
+		define( 'POSTILIO_API_KEY', ' ' . self::KEY . ' ' );
 		Functions\expect( 'get_option' )->never();
 
 		self::assertSame( self::KEY, Settings::api_key() );
@@ -62,6 +65,28 @@ final class SettingsTest extends TestCase {
 
 		self::assertNull( Settings::api_key() );
 		self::assertNull( Settings::api_key_source() );
+	}
+
+	/**
+	 * Keys and whether they have the form of a Postilio key.
+	 *
+	 * @return array<string, array{string, bool}>
+	 */
+	public static function keys(): array {
+		return array(
+			'live'            => array( self::KEY, true ),
+			'test'            => array( 'pk_test_abcdEFGH0123456789abcdefghijklmn', true ),
+			'too short'       => array( substr( self::KEY, 0, -1 ), false ),
+			'text before'     => array( 'x' . self::KEY, false ),
+			'text after'      => array( self::KEY . 'x', false ),
+			'a line break'    => array( self::KEY . "\n", false ),
+			'another service' => array( 'xx_live_abcdEFGH0123456789abcdefghijklmn', false ),
+		);
+	}
+
+	#[DataProvider( 'keys' )]
+	public function test_valid_key_takes_only_the_form_of_a_postilio_key( string $key, bool $valid ): void {
+		self::assertSame( $valid, Settings::valid_key( $key ) );
 	}
 
 	public function test_mask_shows_the_mode_and_the_first_characters_only(): void {

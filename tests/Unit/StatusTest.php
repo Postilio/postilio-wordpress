@@ -44,7 +44,7 @@ final class StatusTest extends TestCase {
 	public function test_check_reads_the_key_and_the_sender_domain_from_one_call( int $status, string $body, string $key, string $domain ): void {
 		$client = $this->client( new Response( $status, array( 'Content-Type' => 'application/json' ), $body ) );
 
-		$result = Status::check( $client, 'pk_live_abcdEFGH0123456789abcdefghijklmn', 'no-reply@mail.example.com', 1791475200 );
+		$result = Status::check( $client, 'pk_live_abcdEFGH0123456789abcdefghijklmn', 'no-reply@Mail.Example.COM', 1791475200 );
 
 		self::assertSame( $key, $result['key'] );
 		self::assertSame( $domain, $result['domain'] );
@@ -71,6 +71,7 @@ final class StatusTest extends TestCase {
 		);
 
 		self::assertSame( $check, Status::read( $check ) );
+		self::assertSame( array_replace( $check, array( 'error' => 'timed out' ) ), Status::read( array_replace( $check, array( 'error' => 'timed out' ) ) ) );
 		self::assertNull( Status::read( false ) );
 		self::assertNull( Status::read( array( 'key' => 'accepted' ) ) );
 		self::assertNull( Status::read( array( 'checked_at' => '1' ) + $check ) );

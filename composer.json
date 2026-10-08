@@ -25,6 +25,7 @@
     "brain/monkey": "^2.6",
     "brianhenryie/strauss": "^0.30",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "infection/infection": "^0.29 || ^0.30 || ^0.31",
     "php-stubs/wordpress-stubs": "^7.0",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^11.5",
@@ -44,7 +45,8 @@
       "php": "8.2.0"
     },
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "infection/extension-installer": true
     }
   },
   "extra": {
@@ -73,6 +75,7 @@
     "test": "phpunit",
     "stan": "phpstan analyse --memory-limit=1G",
     "cs": "phpcs",
-    "cs:fix": "phpcbf"
+    "cs:fix": "phpcbf",
+    "mutation": "infection --threads=max --initial-tests-php-options='-d pcov.enabled=1'"
   }
 }

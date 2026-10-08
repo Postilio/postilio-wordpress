@@ -46,9 +46,14 @@ Rebuild the ZIP (`./build.sh`) after a change, or the test runs the old one.
 
 ### Mutation testing
 
-The unit tests were checked by hand-made mutations of the translation, the error mapping, the key handling and the
-adapter: change a condition, a limit or a value, and see a test fail. Do the same for new logic: a mutation that no
-test notices means a test is missing, or the code is not needed.
+`composer mutation` runs [Infection](https://infection.github.io/) over `src` (it needs pcov or Xdebug). Brain Monkey's
+Patchwork loads PHP files through a stream wrapper of its own, which would hide Infection's mutants; `patchwork.json`
+leaves `src/` and `vendor-prefixed/` to PHP, so the mutants are really run.
+
+Look at every mutant that escapes: either a test is missing, or the code it changed is not needed. On 0.1.0-alpha.1:
+604 mutants, 85 % killed (covered-code MSI). Most of the rest change the wording of an error message, the separators
+of the Idempotency-Key's input, or the trimming of messy header lines, where a test would only repeat the code; the
+settings page's rendering and its AJAX happy path are covered by the integration test, not by unit tests.
 
 ## Conventions
 

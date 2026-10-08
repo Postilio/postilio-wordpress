@@ -65,7 +65,8 @@ final class AdminPage {
 			)
 		);
 		add_settings_section( 'postilio_key', __( 'API key', 'postilio-for-wordpress' ), array( $this, 'key_section' ), self::SLUG );
-		add_settings_field( 'postilio_api_key', __( 'API key', 'postilio-for-wordpress' ), array( $this, 'key_field' ), self::SLUG, 'postilio_key', array( 'label_for' => 'postilio_api_key' ) );
+		// A key in wp-config.php has no field, so nothing to label.
+		add_settings_field( 'postilio_api_key', __( 'API key', 'postilio-for-wordpress' ), array( $this, 'key_field' ), self::SLUG, 'postilio_key', 'constant' === Settings::api_key_source() ? array() : array( 'label_for' => 'postilio_api_key' ) );
 		add_settings_section( 'postilio_sender', __( 'Sender', 'postilio-for-wordpress' ), array( $this, 'sender_section' ), self::SLUG );
 		add_settings_field( 'postilio_from_email', __( 'From address', 'postilio-for-wordpress' ), array( $this, 'from_email_field' ), self::SLUG, 'postilio_sender', array( 'label_for' => 'postilio_from_email' ) );
 		add_settings_field( 'postilio_from_name', __( 'From name', 'postilio-for-wordpress' ), array( $this, 'from_name_field' ), self::SLUG, 'postilio_sender', array( 'label_for' => 'postilio_from_name' ) );
@@ -217,7 +218,7 @@ final class AdminPage {
 	private function status_item( ?bool $ok, string $label, string $text ): void {
 		$icon = null === $ok ? 'dashicons-info-outline' : ( $ok ? 'dashicons-yes-alt' : 'dashicons-warning' );
 		$word = null === $ok ? __( 'Unknown', 'postilio-for-wordpress' ) : ( $ok ? __( 'OK', 'postilio-for-wordpress' ) : __( 'Problem', 'postilio-for-wordpress' ) );
-		echo '<li><span class="dashicons ' . esc_attr( $icon ) . '" aria-hidden="true"></span> <strong>' . esc_html( $label ) . '</strong> <span class="screen-reader-text">(' . esc_html( $word ) . ')</span>: ' . esc_html( $text ) . '</li>';
+		echo '<li><span class="dashicons ' . esc_attr( $icon ) . '" aria-hidden="true"></span> <strong>' . esc_html( $label ) . '</strong><span class="screen-reader-text"> (' . esc_html( $word ) . ')</span>: ' . esc_html( $text ) . '</li>';
 	}
 
 	/** Explains the key. */
@@ -231,7 +232,7 @@ final class AdminPage {
 		$key = Settings::api_key();
 		if ( 'constant' === Settings::api_key_source() && null !== $key ) {
 			/* translators: %s: the masked key. */
-			echo '<p id="postilio_api_key">' . esc_html( sprintf( __( 'Set in wp-config.php (POSTILIO_API_KEY): %s', 'postilio-for-wordpress' ), Settings::mask( $key ) ) ) . '</p>';
+			echo '<p>' . esc_html( sprintf( __( 'Set in wp-config.php (POSTILIO_API_KEY): %s', 'postilio-for-wordpress' ), Settings::mask( $key ) ) ) . '</p>';
 			return;
 		}
 		echo '<input type="password" id="postilio_api_key" name="' . esc_attr( Settings::OPTION ) . '[api_key]" class="regular-text" autocomplete="off" spellcheck="false" value="" aria-describedby="postilio_api_key_hint"';

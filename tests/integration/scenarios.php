@@ -160,7 +160,8 @@ $html = (string) ob_get_clean();
 $check(
 	'the settings fields have labels and show the key masked only',
 	str_contains( $html, '<label for="postilio_from_email">' ) && str_contains( $html, '<label for="postilio_from_name">' )
-		&& str_contains( $html, 'pk_test_0000…' ) && ! str_contains( $html, POSTILIO_API_KEY ),
+		&& str_contains( $html, 'pk_test_0000…' ) && ! str_contains( $html, POSTILIO_API_KEY )
+		&& ! str_contains( $html, '<label for="postilio_api_key">' ), // With the key in wp-config.php there is no field to label.
 	$html
 );
 

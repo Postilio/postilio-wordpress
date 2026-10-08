@@ -33,10 +33,11 @@ printf '{ "phpVersion": "%s", "core": %s }\n' "$php_version" "$core" > .wp-env.o
 "${wp_env[@]}" start --update 2>/dev/null
 "${wp_env[@]}" run cli wp eval-file wp-content/postilio-integration/scenarios.php
 
-# The Dutch translation, on a site in Dutch: a new process, so the plug-in loads its text domain on init.
-"${wp_env[@]}" run cli wp option update WPLANG nl_NL > /dev/null 2>&1
+# The Dutch translation, on a site in Dutch (WordPress's own Dutch language pack installed, as on a real site): a new
+# process, so the plug-in loads its text domain on init.
+"${wp_env[@]}" run cli wp language core install nl_NL --activate > /dev/null 2>&1
 dutch=$("${wp_env[@]}" run cli wp eval "echo __( 'API key', 'postilio-for-wordpress' );" 2>/dev/null | tail -1)
-"${wp_env[@]}" run cli wp option update WPLANG '' > /dev/null 2>&1
+"${wp_env[@]}" run cli wp site switch-language en_US > /dev/null 2>&1
 if [ "$dutch" != "API-sleutel" ]; then
     echo "not ok - the Dutch translation is not loaded (got: $dutch)" >&2
     exit 1

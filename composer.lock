@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d1272332419b9ea073053fa454d2c27",
+    "content-hash": "6c56b773510884411272a96645b9b173",
     "packages": [
         {
             "name": "nyholm/psr7",
@@ -90,12 +90,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Postilio/postilio-php.git",
-                "reference": "8d012a04d008d3dd94b1f2ac488e1d1139503097"
+                "reference": "3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Postilio/postilio-php/zipball/8d012a04d008d3dd94b1f2ac488e1d1139503097",
-                "reference": "8d012a04d008d3dd94b1f2ac488e1d1139503097",
+                "url": "https://api.github.com/repos/Postilio/postilio-php/zipball/3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347",
+                "reference": "3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347",
                 "shasum": ""
             },
             "require": {
@@ -164,7 +164,7 @@
                 "issues": "https://github.com/Postilio/postilio-php/issues",
                 "security": "https://github.com/Postilio/postilio-php/security/policy"
             },
-            "time": "2026-10-08T15:19:55+00:00"
+            "time": "2026-10-09T09:45:06+00:00"
         },
         {
             "name": "psr/http-client",

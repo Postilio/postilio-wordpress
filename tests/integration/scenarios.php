@@ -141,7 +141,7 @@ $check( 'several To addresses with a Bcc are refused and nothing is sent', false
 
 // The status line, over HTTP.
 $status = PostilioWp\Status::check( PostilioWp\Plugin::client( POSTILIO_API_KEY ), POSTILIO_API_KEY, 'no-reply@mail.example.test', time() );
-$check( 'the status line reads the key as accepted, test mode, domain unknown without domains:manage', 'accepted' === $status['key'] && 'test' === $status['mode'] && 'unknown' === $status['domain'], $status );
+$check( 'the status line reads the key as accepted, test mode, domain verified: a test key may read domains', 'accepted' === $status['key'] && 'test' === $status['mode'] && 'verified' === $status['domain'], $status );
 
 // The settings page: labels, and the key never in the page.
 require_once ABSPATH . 'wp-admin/includes/template.php';

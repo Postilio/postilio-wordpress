@@ -21,7 +21,7 @@ bundled with its namespace prefixed, so it cannot clash with another plug-in's c
    |---|---|
    | `emails:send` | sending; the only scope the plug-in needs |
    | `emails:read` | the delivery status of a test email on the settings page |
-   | `domains:manage` | the sender domain's status on the settings page (live keys only; it also allows changing domains) |
+   | `domains:read` | the sender domain's status on the settings page (`domains:manage` works too, but also allows changing domains) |
 
    A test key (`pk_test_…`) goes through every check but delivers nothing: good for a staging site.
 4. Put the key in `wp-config.php`, above the line `/* That's all, stop editing! */`:
@@ -44,7 +44,7 @@ plug-ins page say so.
 
 - **Status**: whether Postilio accepts the key, whether it is a live or a test key, and whether the sender's domain is
   verified (`verified`, `pending`, `failing`, not a domain of the project, or unknown when the key lacks
-  `domains:manage`). One call to the API, cached for 12 hours; **Check again** refreshes it. Saving the settings
+  `domains:read`). One call to the API, cached for 12 hours; **Check again** refreshes it. Saving the settings
   refreshes it too.
 - **API key**: the masked key and where it comes from. See below.
 - **From address** and **From name**: the sender of every email.

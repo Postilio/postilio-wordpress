@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The sender domain's status needs the scope `domains:read` (or `domains:manage`), which a test key may have too; the
+  settings page, README and readme.txt name it instead of `domains:manage`.
+- On the Postilio PHP SDK at commit `3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347`: a test email's timeline knows the
+  reason `async_bounce`, a bounce reported after delivery.
+
 ## [0.1.0-alpha.1]
 
 First version, on the Postilio PHP SDK at commit `8d012a04d008d3dd94b1f2ac488e1d1139503097` (0.1.0-alpha.1, not tagged

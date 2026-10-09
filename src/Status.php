@@ -53,7 +53,7 @@ final class Status {
 	 *
 	 * @return array{checked_at: int, mode: string, key: string, domain: string, sender_domain: string, error: ?string}
 	 *         `key` is accepted, rejected or error; `domain` is verified, pending, failing, not_found or unknown (the key
-	 *         lacks domains:manage, which a test key never has).
+	 *         lacks domains:read).
 	 */
 	public static function check( PostilioClient $client, string $key, string $from_email, int $now ): array {
 		$at     = strrpos( $from_email, '@' );

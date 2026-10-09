@@ -76,7 +76,7 @@ $check(
 	'with the key, an Idempotency-Key and the plug-in in the User-Agent',
 	'Bearer pk_test_00000000000000000000000000000000' === ( $request['headers']['authorization'] ?? null )
 		&& 1 === preg_match( '/^wp-[0-9a-f]{64}$/', (string) ( $request['headers']['idempotency-key'] ?? '' ) )
-		&& str_contains( (string) ( $request['headers']['user-agent'] ?? '' ), 'postilio-for-wordpress/0.1.0-alpha.1' ),
+		&& str_contains( (string) ( $request['headers']['user-agent'] ?? '' ), 'postilio-for-wordpress/0.1.0-alpha.2' ),
 	$request['headers'] ?? null
 );
 $check( 'fires wp_mail_succeeded and not PHPMailer', 1 === count( $successes ) && array() === $failures && false === $phpmailer );

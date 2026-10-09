@@ -15,7 +15,7 @@ use PostilioWp\Vendor\Postilio\PostilioClient;
 /** The plug-in. */
 final class Plugin {
 	/** The plug-in's version; matches the header of postilio-for-wordpress.php. */
-	public const VERSION = '0.1.0-alpha.1';
+	public const VERSION = '0.1.0-alpha.2';
 
 	/** Seconds for a request to the API; the http_request_args filter can change it. */
 	private const TIMEOUT = 15.0;

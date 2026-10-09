@@ -3,7 +3,7 @@
  * Plugin Name:       Postilio for WordPress
  * Plugin URI:        https://github.com/Postilio/postilio-wordpress
  * Description:       Sends your site's email through Postilio, European transactional email, instead of the server's own mail function.
- * Version:           0.1.0-alpha.1
+ * Version:           0.1.0-alpha.2
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            Postilio

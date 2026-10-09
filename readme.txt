@@ -3,7 +3,7 @@ Tags: email, wp_mail, transactional email, smtp, deliverability
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 0.1.0-alpha.1
+Stable tag: 0.1.0-alpha.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ This plug-in sends email through the Postilio API (`https://api.postilio.eu`), r
 What is sent, for each email: the sender, the recipients, the subject, the text and HTML body, the attachments, the Reply-To address and the custom headers listed above, plus your API key, a tag (`wordpress`), and the plug-in's and PHP's version in the User-Agent. For the status line: a request for your project's domains. Postilio holds an email's content only until the receiving mail server has it; its message log keeps, per recipient, the sender, the recipient, the status and its events, and the subject unless your project turns that off, for 30 days by default. Postilio's documentation: https://docs.postilio.eu. Postilio's terms of service and privacy policy for the service: to be published before this plug-in is listed.
 
 == Changelog ==
+
+= 0.1.0-alpha.2 =
+* The sender domain's status needs the scope domains:read, which a test key may have too.
 
 = 0.1.0-alpha.1 =
 * First version: wp_mail() through the Postilio API, a settings page with a status line and a test email.

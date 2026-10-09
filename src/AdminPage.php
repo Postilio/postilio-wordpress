@@ -192,7 +192,7 @@ final class AdminPage {
 			'pending'   => array( false, __( 'not verified yet: not all of its DNS records were found. Postilio refuses email from it until they are.', 'postilio-for-wordpress' ) ),
 			'failing'   => array( false, __( 'failing: a DNS record went missing. Postilio keeps sending for 72 hours, then refuses email from it until the record is back.', 'postilio-for-wordpress' ) ),
 			'not_found' => array( false, __( 'not a domain of this key\'s project. Postilio refuses email from it.', 'postilio-for-wordpress' ) ),
-			'unknown'   => array( null, __( 'unknown: the key may not read domains (scope domains:manage, never on a test key). Send a test email to see whether Postilio takes it.', 'postilio-for-wordpress' ) ),
+			'unknown'   => array( null, __( 'unknown: the key may not read domains (scope domains:read). Send a test email to see whether Postilio takes it.', 'postilio-for-wordpress' ) ),
 		);
 		[ $domain_ok, $domain_text ] = $domains[ $status['domain'] ] ?? $domains['unknown'];
 
@@ -223,7 +223,7 @@ final class AdminPage {
 
 	/** Explains the key. */
 	public function key_section(): void {
-		echo '<p>' . esc_html__( 'Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email\'s delivery here, and domains:manage to see the sender domain\'s status. Safest is the constant in wp-config.php, outside the database:', 'postilio-for-wordpress' ) . '</p>';
+		echo '<p>' . esc_html__( 'Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email\'s delivery here, and domains:read to see the sender domain\'s status. Safest is the constant in wp-config.php, outside the database:', 'postilio-for-wordpress' ) . '</p>';
 		echo "<p><code>define( 'POSTILIO_API_KEY', 'pk_live_…' );</code></p>";
 	}
 

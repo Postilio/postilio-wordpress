@@ -19,7 +19,7 @@
   "require": {
     "php": ">=8.2",
     "nyholm/psr7": "^1.8",
-    "postilio/postilio-php": "dev-main#8d012a04d008d3dd94b1f2ac488e1d1139503097"
+    "postilio/postilio-php": "dev-main#3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347"
   },
   "require-dev": {
     "brain/monkey": "^2.6",

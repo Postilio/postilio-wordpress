@@ -104,7 +104,25 @@ if ( ! is_string( $postilio_fake_path ) || ! str_starts_with( $postilio_fake_pat
 		);
 	}
 	if ( 'GET' === $method && '/v1/domains' === $route ) {
-		$answer( 403, array( 'error' => 'insufficient_scope' ) );
+		$answer(
+			200,
+			array(
+				'data' => array(
+					array(
+						'id'           => '01a1081b-eb5c-7685-ab38-fdd4a4ab10e5',
+						'name'         => 'mail.example.test',
+						'status'       => 'verified',
+						'checkedAt'    => null,
+						'records'      => array(),
+						'createdAt'    => '2026-10-04T18:10:09.884+00:00',
+						'addedBy'      => null,
+						'failingSince' => null,
+						'sent30d'      => 0,
+						'dmarc'        => null,
+					),
+				),
+			)
+		);
 	}
 	$answer( 404, null );
 } )( $postilio_fake_path );

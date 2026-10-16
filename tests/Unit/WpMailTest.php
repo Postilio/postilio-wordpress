@@ -428,16 +428,42 @@ final class WpMailTest extends TestCase {
 		self::assertSame( array( 'archive@example.org' ), $requests[0]['request']->bcc );
 	}
 
-	public function test_translate_refuses_cc_or_bcc_with_several_recipients(): void {
-		self::assertRefused(
-			'cc_bcc_require_single_to',
-			fn() => $this->translate(
-				array(
-					'to'      => 'ada@example.org, grace@example.org',
-					'headers' => 'Bcc: archive@example.org',
-				)
+	public function test_translate_gives_every_recipient_a_copy_of_their_own_with_several_to_addresses_and_cc_or_bcc(): void {
+		$requests = $this->translate(
+			array(
+				'to'      => 'ada@example.org, grace@example.org',
+				'headers' => array( 'Cc: alan@example.org, ada@example.org', 'Bcc: archive@example.org' ),
 			)
 		);
+
+		self::assertCount( 1, $requests );
+		$request = $requests[0]['request'];
+		self::assertSame( array( 'ada@example.org', 'grace@example.org', 'alan@example.org', 'archive@example.org' ), $request->to );
+		self::assertNull( $request->cc );
+		self::assertNull( $request->bcc );
+	}
+
+	public function test_translate_splits_several_to_addresses_with_bcc_into_requests_of_fifty_without_cc_or_bcc(): void {
+		$to  = array();
+		$bcc = array();
+		for ( $i = 0; $i < 30; $i++ ) {
+			$to[]  = "user$i@example.org";
+			$bcc[] = "hidden$i@example.org";
+		}
+
+		$requests = $this->translate(
+			array(
+				'to'      => $to,
+				'headers' => array( 'Bcc: ' . implode( ', ', $bcc ) ),
+			)
+		);
+
+		self::assertSame( array( 50, 10 ), array_map( static fn( array $r ) => count( $r['request']->to ), $requests ) );
+		self::assertSame( 'hidden29@example.org', $requests[1]['request']->to[9] );
+		foreach ( $requests as $item ) {
+			self::assertNull( $item['request']->cc );
+			self::assertNull( $item['request']->bcc );
+		}
 	}
 
 	public function test_translate_splits_more_than_fifty_recipients_into_requests_of_fifty(): void {

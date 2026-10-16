@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- An email with several To addresses and Cc or Bcc is sent instead of refused (`cc_bcc_require_single_to` is gone):
+  every recipient, To, Cc and Bcc alike, gets a copy of their own that shows only their own address, as Postilio's SMTP
+  submission reads such a message. No Bcc address appears on another copy; more than 50 recipients, or more than 25 MB
+  as size times recipients, are split as without Cc or Bcc.
 - The Postilio PHP SDK is now its release 0.1.0-alpha.1 from Packagist, instead of a commit through a VCS repository.
 - The sender domain's status on the settings page needs only the scope `domains:read`, which a test key may have too
   (the SDK release reads domains with it); the texts named `domains:manage`.

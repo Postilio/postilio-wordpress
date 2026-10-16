@@ -39,7 +39,7 @@ Until a key is set, WordPress sends its email as before.
 
 = What happens to Cc and Bcc? =
 
-Postilio gives every recipient a copy of their own. With one To address, Cc and Bcc work as in any mail program: every copy shows the To and the Cc addresses, and Bcc addresses stay hidden. Postilio takes Cc and Bcc only with exactly one To address, so an email with several To addresses and a Cc or Bcc is refused (wp_mail() returns false) in this version. Several To addresses without Cc or Bcc each get their own copy, which shows only their own address. Names in To, Cc and Bcc are dropped: Postilio takes bare addresses there.
+Postilio gives every recipient a copy of their own. With one To address, Cc and Bcc work as in any mail program: every copy shows the To and the Cc addresses, and Bcc addresses stay hidden. Several To addresses each get their own copy, which shows only their own address; with a Cc or Bcc as well, every To, Cc and Bcc recipient gets such a copy of their own, so the Cc header is not shown and no Bcc address appears on another copy. Names in To, Cc and Bcc are dropped: Postilio takes bare addresses there.
 
 = Which headers are passed on? =
 

@@ -133,11 +133,16 @@ $check(
 );
 update_option( 'postilio_settings', $settings );
 
-// Several To addresses with a Bcc: refused before sending.
+// Several To addresses with Cc and Bcc: every recipient a copy of their own, no cc or bcc in the request.
 $reset();
 $failures = array();
-$sent     = wp_mail( array( 'a@example.test', 'b@example.test' ), 'Hello', 'Hi', 'Bcc: c@example.test' );
-$check( 'several To addresses with a Bcc are refused and nothing is sent', false === $sent && array() === $requests() && 'cc_bcc_require_single_to' === $code( $failures ) );
+$sent     = wp_mail( array( 'a@example.test', 'b@example.test' ), 'Hello', 'Hi', array( 'Cc: c@example.test', 'Bcc: d@example.test' ) );
+$body     = $requests()[0]['body'] ?? array();
+$check(
+	'several To addresses with Cc and Bcc go out as one copy per recipient, without cc or bcc',
+	true === $sent && 1 === count( $requests() ) && array( 'a@example.test', 'b@example.test', 'c@example.test', 'd@example.test' ) === ( $body['to'] ?? null ) && ! isset( $body['cc'] ) && ! isset( $body['bcc'] ),
+	$requests()
+);
 
 // The status line, over HTTP.
 $status = PostilioWp\Status::check( PostilioWp\Plugin::client( POSTILIO_API_KEY ), POSTILIO_API_KEY, 'no-reply@mail.example.test', time() );

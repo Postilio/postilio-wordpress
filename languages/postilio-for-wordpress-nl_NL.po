@@ -180,8 +180,8 @@ msgid "not a domain of this key's project. Postilio refuses email from it."
 msgstr "geen domein van het project van deze sleutel. Postilio weigert e-mail vanaf dit domein."
 
 #: src/AdminPage.php:194
-msgid "unknown: the key may not read domains (scope domains:manage, never on a test key). Send a test email to see whether Postilio takes it."
-msgstr "onbekend: de sleutel mag geen domeinen lezen (scope domains:manage, nooit op een testsleutel). Verstuur een testmail om te zien of Postilio het domein accepteert."
+msgid "unknown: the key may not read domains (scope domains:read). Send a test email to see whether Postilio takes it."
+msgstr "onbekend: de sleutel mag geen domeinen lezen (scope domains:read). Verstuur een testmail om te zien of Postilio het domein accepteert."
 
 #: src/AdminPage.php:200
 msgid "Sender domain"
@@ -210,8 +210,8 @@ msgid "Problem"
 msgstr "Probleem"
 
 #: src/AdminPage.php:225
-msgid "Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email's delivery here, and domains:manage to see the sender domain's status. Safest is the constant in wp-config.php, outside the database:"
-msgstr "Maak een sleutel aan in het Postilio-portaal onder Keys & SMTP, met de scope emails:send. Voeg emails:read toe om hier de bezorging van een testmail te zien, en domains:manage voor de status van het afzenderdomein. Het veiligst is de constante in wp-config.php, buiten de database:"
+msgid "Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email's delivery here, and domains:read to see the sender domain's status. Safest is the constant in wp-config.php, outside the database:"
+msgstr "Maak een sleutel aan in het Postilio-portaal onder Keys & SMTP, met de scope emails:send. Voeg emails:read toe om hier de bezorging van een testmail te zien, en domains:read voor de status van het afzenderdomein. Het veiligst is de constante in wp-config.php, buiten de database:"
 
 #. translators: %s: the masked key.
 #: src/AdminPage.php:234

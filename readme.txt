@@ -26,7 +26,7 @@ This is an alpha version.
 == Installation ==
 
 1. Upload the ZIP under Plugins → Add New Plugin → Upload Plugin, and activate it.
-2. Create an API key in the Postilio portal under Keys & SMTP, with the scope `emails:send` (add `emails:read` to see a test email's delivery in WordPress, and `domains:manage` for the domain status).
+2. Create an API key in the Postilio portal under Keys & SMTP, with the scope `emails:send` (add `emails:read` to see a test email's delivery in WordPress, and `domains:read` for the domain status).
 3. Add it to `wp-config.php`, above the line that says to stop editing:
    `define( 'POSTILIO_API_KEY', 'pk_live_…' );`
    Or enter it under Settings → Postilio.

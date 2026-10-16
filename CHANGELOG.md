@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The Postilio PHP SDK is now its release 0.1.0-alpha.1 from Packagist, instead of a commit through a VCS repository.
+- The sender domain's status on the settings page needs only the scope `domains:read`, which a test key may have too
+  (the SDK release reads domains with it); the texts named `domains:manage`.
+
 ## [0.1.0-alpha.1]
 
 First version, on the Postilio PHP SDK at commit `8d012a04d008d3dd94b1f2ac488e1d1139503097` (0.1.0-alpha.1, not tagged

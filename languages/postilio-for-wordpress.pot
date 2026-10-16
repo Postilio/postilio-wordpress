@@ -178,7 +178,7 @@ msgid "not a domain of this key's project. Postilio refuses email from it."
 msgstr ""
 
 #: src/AdminPage.php:194
-msgid "unknown: the key may not read domains (scope domains:manage, never on a test key). Send a test email to see whether Postilio takes it."
+msgid "unknown: the key may not read domains (scope domains:read). Send a test email to see whether Postilio takes it."
 msgstr ""
 
 #: src/AdminPage.php:200
@@ -208,7 +208,7 @@ msgid "Problem"
 msgstr ""
 
 #: src/AdminPage.php:225
-msgid "Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email's delivery here, and domains:manage to see the sender domain's status. Safest is the constant in wp-config.php, outside the database:"
+msgid "Create a key in the Postilio portal under Keys & SMTP, with the scope emails:send. Add emails:read to see a test email's delivery here, and domains:read to see the sender domain's status. Safest is the constant in wp-config.php, outside the database:"
 msgstr ""
 
 #. translators: %s: the masked key.

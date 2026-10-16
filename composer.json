@@ -10,16 +10,10 @@
     "issues": "https://github.com/Postilio/postilio-wordpress/issues",
     "security": "https://github.com/Postilio/postilio-wordpress/security/policy"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/Postilio/postilio-php"
-    }
-  ],
   "require": {
     "php": ">=8.2",
     "nyholm/psr7": "^1.8",
-    "postilio/postilio-php": "dev-main#8d012a04d008d3dd94b1f2ac488e1d1139503097"
+    "postilio/postilio-php": "0.1.0-alpha.1"
   },
   "require-dev": {
     "brain/monkey": "^2.6",

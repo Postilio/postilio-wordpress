@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.0-alpha.3] - 2026-10-16
+
 ### Changed
 
 - An email with several To addresses and Cc or Bcc is sent instead of refused (`cc_bcc_require_single_to` is gone):

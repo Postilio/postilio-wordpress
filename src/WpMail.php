@@ -52,17 +52,16 @@ final class WpMail {
 		$to   = self::addresses( is_array( $atts['to'] ?? '' ) ? $atts['to'] : explode( ',', Settings::text( $atts['to'] ?? '' ) ), $seen );
 		$cc   = self::addresses( $headers['cc'], $seen );
 		$bcc  = self::addresses( $headers['bcc'], $seen );
-		if ( array() === $to ) {
-			// Only Cc or Bcc, as WordPress allows: each of them gets a copy of their own.
-			$to  = array_merge( $cc, $bcc );
+		if ( 1 !== count( $to ) ) {
+			// Only Cc or Bcc, as WordPress allows, or several To addresses with Cc or Bcc, which Postilio takes only with
+			// one To: every recipient gets a copy of their own that shows only their own address, so no Bcc address
+			// ever appears on another copy, as Postilio's SMTP submission reads such a message.
+			$to  = array_merge( $to, $cc, $bcc );
 			$cc  = array();
 			$bcc = array();
 		}
 		if ( array() === $to ) {
 			throw new MailError( 'no_recipients', 'The email has no valid recipient.' );
-		}
-		if ( ( array() !== $cc || array() !== $bcc ) && count( $to ) > 1 ) {
-			throw new MailError( 'cc_bcc_require_single_to', 'Postilio sends Cc and Bcc only with exactly one To address; this email has ' . count( $to ) . '.' ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- plain text, never printed as HTML.
 		}
 
 		$from     = self::from( $headers['from'], $settings );

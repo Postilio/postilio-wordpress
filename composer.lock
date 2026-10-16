@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c56b773510884411272a96645b9b173",
+    "content-hash": "bb5ba9804b6c668c6633e97a04876a8f",
     "packages": [
         {
             "name": "nyholm/psr7",
@@ -86,16 +86,16 @@
         },
         {
             "name": "postilio/postilio-php",
-            "version": "dev-main",
+            "version": "v0.1.0-alpha.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Postilio/postilio-php.git",
-                "reference": "3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347"
+                "reference": "2ec0652a5ad77e1f58b4697368bded784a15b312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Postilio/postilio-php/zipball/3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347",
-                "reference": "3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347",
+                "url": "https://api.github.com/repos/Postilio/postilio-php/zipball/2ec0652a5ad77e1f58b4697368bded784a15b312",
+                "reference": "2ec0652a5ad77e1f58b4697368bded784a15b312",
                 "shasum": ""
             },
             "require": {
@@ -116,35 +116,13 @@
                 "ext-curl": "For the built-in transport, when you pass no PSR-18 client",
                 "php-http/discovery": "To find PSR-17 factories when you pass a PSR-18 client without them"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Postilio\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Postilio\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit"
-                ],
-                "stan": [
-                    "phpstan analyse --memory-limit=1G"
-                ],
-                "cs": [
-                    "php-cs-fixer check --diff"
-                ],
-                "cs:fix": [
-                    "php-cs-fixer fix"
-                ],
-                "mutation": [
-                    "infection --threads=max --initial-tests-php-options='-d pcov.enabled=1'"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -160,11 +138,11 @@
             ],
             "support": {
                 "docs": "https://docs.postilio.eu",
-                "source": "https://github.com/Postilio/postilio-php",
                 "issues": "https://github.com/Postilio/postilio-php/issues",
-                "security": "https://github.com/Postilio/postilio-php/security/policy"
+                "security": "https://github.com/Postilio/postilio-php/security/policy",
+                "source": "https://github.com/Postilio/postilio-php"
             },
-            "time": "2026-10-09T09:45:06+00:00"
+            "time": "2026-10-15T11:01:08+00:00"
         },
         {
             "name": "psr/http-client",
@@ -7883,7 +7861,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "postilio/postilio-php": 20
+        "postilio/postilio-php": 15
     },
     "prefer-stable": false,
     "prefer-lowest": false,

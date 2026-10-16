@@ -21,7 +21,7 @@ bundled with its namespace prefixed, so it cannot clash with another plug-in's c
    |---|---|
    | `emails:send` | sending; the only scope the plug-in needs |
    | `emails:read` | the delivery status of a test email on the settings page |
-   | `domains:read` | the sender domain's status on the settings page (`domains:manage` works too, but also allows changing domains) |
+   | `domains:read` | the sender domain's status on the settings page; a test key may have it too (`domains:manage` works too, but also allows changing domains) |
 
    A test key (`pk_test_…`) goes through every check but delivers nothing: good for a staging site.
 4. Put the key in `wp-config.php`, above the line `/* That's all, stop editing! */`:
@@ -102,20 +102,21 @@ The plug-in fires `wp_mail_succeeded` when Postilio accepted every request, and 
 ### Cc and Bcc
 
 Postilio gives every recipient a copy of their own (its message model), and takes `cc` and `bcc` only with exactly one
-address in `to` (`422 cc_bcc_require_single_to`). So:
+address in `to`. So:
 
 - **One To address, with Cc and/or Bcc**: works as in a mail program. Every copy, the Cc and Bcc recipients' too, shows
   the To address and the Cc addresses; the Bcc addresses appear on no copy.
 - **Several To addresses, no Cc or Bcc**: every recipient gets a copy that shows only their own address. In WordPress
   with PHP's mail(), they would see each other in the To header.
 - **Only Cc or Bcc, no To**: every one of them gets a copy of their own, showing their own address.
-- **Several To addresses with Cc or Bcc**: refused in this version (`wp_mail()` returns false, `wp_mail_failed` with
-  `cc_bcc_require_single_to`), and nothing is sent. Postilio itself has no way to send it with the headers WordPress
-  would write; how to map it is an open decision.
+- **Several To addresses with Cc or Bcc**: every recipient, To, Cc and Bcc alike, gets a copy of their own that shows
+  only their own address, as Postilio's SMTP submission reads such a message. The Cc header is not shown, and no Bcc
+  address appears on any other copy. Such a call is split like one without Cc or Bcc (see below).
 - **Names** in To, Cc and Bcc are dropped: the API takes bare addresses there. The From and Reply-To names stay.
 - To, Cc and Bcc together hold at most 50 addresses, and the size times the recipients at most 25 MB. Over that,
-  Postilio refuses the email (`400`, or `413 message_too_large_for_recipients`) and `wp_mail()` returns false; a call
-  without Cc or Bcc is split into several requests instead.
+  Postilio refuses an email with one To address and Cc or Bcc (`400`, or `413 message_too_large_for_recipients`) and
+  `wp_mail()` returns false, because splitting it would change who sees whom; any other call is split into several
+  requests instead.
 
 ### Attachments
 
@@ -135,7 +136,7 @@ and DKIM, from a server that may not be allowed to send for it. Instead:
   names the call, the status and the Postilio error code, and in its data the `wp_mail()` arguments plus
   `postilio_error` (such as `unverified_sender_domain`, `plan_daily_limit_reached`, `transport_error` for no answer,
   or a code of the plug-in: `no_recipients`, `invalid_from`, `empty_message`, `attachment_not_readable`,
-  `too_many_attachments`, `message_too_large`, `cc_bcc_require_single_to`, `invalid_api_key`), `postilio_status`,
+  `too_many_attachments`, `message_too_large`, `invalid_api_key`), `postilio_status`,
   `postilio_trace_id` and `postilio_ids` (the messages accepted before a later request of the same email failed).
 - One line goes to the PHP error log, with the message and the trace id, never the key, the recipients or the content.
 
@@ -152,7 +153,6 @@ an answer that asks to wait longer fails at once.
 | `sandbox_recipient_not_allowed` | Your organization is in the sandbox: live mail goes only to your team and your verified domains. |
 | `insufficient_scope` | The key lacks `emails:send`. |
 | `client_ip_not_allowed` | The key is limited to networks your web server is not in. |
-| `cc_bcc_require_single_to` | A plug-in sends to several To addresses with Cc or Bcc; see [Cc and Bcc](#cc-and-bcc). |
 | `transport_error`, `cURL error 28` | No answer within 15 seconds: check the server's outgoing HTTPS (firewall, proxy). The plug-in uses the WordPress HTTP API, so `WP_PROXY_HOST` and friends apply, and the `http_request_args` filter can change the timeout. |
 | Mail still comes from `wordpress@…` | No key is set, so WordPress sends itself (see the dashboard notice). |
 | A plug-in's email has no body | It builds the body in `phpmailer_init`, which does not run; see [How an email is translated](#how-an-email-is-translated). |

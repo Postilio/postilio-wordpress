@@ -21,10 +21,10 @@ be, see [WordPress.org](#wordpressorg-later).
    ```
 
    (`make-pot` runs inside wp-env on the unpacked build in `dist/`; copy the `.pot` back, or run WP-CLI locally.)
-3. **The SDK.** `composer.json` pins `postilio/postilio-php` to a commit through a VCS repository, because the SDK has
-   no release tag and is not on Packagist yet. Once it has a tag, require that tag (`"0.1.0-alpha.1"`, or a range once
-   it is on Packagist, and drop the `repositories` entry), run `composer update postilio/postilio-php`, and note the
-   SDK version in `CHANGELOG.md`.
+3. **The SDK.** `composer.json` requires `postilio/postilio-php` from Packagist at one exact version
+   (`"0.1.0-alpha.1"`: an exact pre-release version is allowed under `"minimum-stability": "stable"`). To move to a new
+   SDK release, change that version, run `composer update postilio/postilio-php`, read the SDK's changelog for changes
+   the plug-in depends on, and note the SDK version in `CHANGELOG.md`.
 4. **Build and test**:
 
    ```sh

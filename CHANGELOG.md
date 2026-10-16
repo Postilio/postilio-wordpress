@@ -12,9 +12,17 @@ All notable changes to this project are documented here. The format follows
   every recipient, To, Cc and Bcc alike, gets a copy of their own that shows only their own address, as Postilio's SMTP
   submission reads such a message. No Bcc address appears on another copy; more than 50 recipients, or more than 25 MB
   as size times recipients, are split as without Cc or Bcc.
-- The Postilio PHP SDK is now its release 0.1.0-alpha.1 from Packagist, instead of a commit through a VCS repository.
-- The sender domain's status on the settings page needs only the scope `domains:read`, which a test key may have too
-  (the SDK release reads domains with it); the texts named `domains:manage`.
+- The Postilio PHP SDK is now its release 0.1.0-alpha.1 from Packagist (commit
+  `2ec0652a5ad77e1f58b4697368bded784a15b312`, which contains `3e671fb`), instead of a commit through a VCS repository.
+
+## [0.1.0-alpha.2] - 2026-10-09
+
+### Changed
+
+- The sender domain's status needs the scope `domains:read` (or `domains:manage`), which a test key may have too; the
+  settings page, README and readme.txt name it instead of `domains:manage`.
+- On the Postilio PHP SDK at commit `3e671fb84b7b5ebf8f91d06f445f1dcb22fd9347`: a test email's timeline knows the
+  reason `async_bounce`, a bounce reported after delivery.
 
 ## [0.1.0-alpha.1]
 

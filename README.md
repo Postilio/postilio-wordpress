@@ -21,7 +21,7 @@ bundled with its namespace prefixed, so it cannot clash with another plug-in's c
    |---|---|
    | `emails:send` | sending; the only scope the plug-in needs |
    | `emails:read` | the delivery status of a test email on the settings page |
-   | `domains:read` | the sender domain's status on the settings page (a test key may have it too) |
+   | `domains:read` | the sender domain's status on the settings page; a test key may have it too (`domains:manage` works too, but also allows changing domains) |
 
    A test key (`pk_test_…`) goes through every check but delivers nothing: good for a staging site.
 4. Put the key in `wp-config.php`, above the line `/* That's all, stop editing! */`:

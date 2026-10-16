@@ -1,0 +1,60 @@
+name: release
+
+# Builds the plug-in's ZIP for a pushed tag v<version> and attaches it, with its sha256, to the GitHub release of that
+# tag. Nothing goes to WordPress.org.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write # the GitHub release
+
+# Actions are pinned to a commit hash, with the version as a comment. To bump one, look up the commit of the new tag
+# (gh api repos/<owner>/<action>/commits/<tag> --jq .sha) and replace both the hash and the comment.
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          coverage: none
+      - name: Check that the tag matches the version
+        run: |
+          version=$(sed -n 's/^ \* Version: *//p' postilio-for-wordpress.php)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "The tag $GITHUB_REF_NAME does not match the version $version in postilio-for-wordpress.php." >&2
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      # The checks, then dist/postilio-for-wordpress-<version>.zip; build.sh also checks the version in Plugin::VERSION
+      # and readme.txt.
+      - run: ./build.sh
+      - name: Write the checksum and the release notes
+        run: |
+          cd dist
+          sha256sum "postilio-for-wordpress-$VERSION.zip" > "postilio-for-wordpress-$VERSION.zip.sha256"
+          cd ..
+          # The section of CHANGELOG.md for this version, without its heading.
+          awk -v heading="## [$VERSION]" 'index($0, "## [") == 1 { if (found) exit; found = (index($0, heading) == 1); next } found' CHANGELOG.md > notes.md
+          if [ -z "$(tr -d '[:space:]' < notes.md)" ]; then
+            echo "CHANGELOG.md has no section for $VERSION." >&2
+            exit 1
+          fi
+      - name: Create the GitHub release, or add the ZIP to one made by hand
+        run: |
+          assets=("dist/postilio-for-wordpress-$VERSION.zip" "dist/postilio-for-wordpress-$VERSION.zip.sha256")
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
+          else
+            flags=()
+            if [[ "$VERSION" == *-* ]]; then
+              flags+=(--prerelease)
+            fi
+            gh release create "$GITHUB_REF_NAME" "${assets[@]}" --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md "${flags[@]}"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
